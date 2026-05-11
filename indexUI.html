@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Third Party Motor Insurance – Solarelle Insurance</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:        #606bb3;
+      --navy-hover:  #596296;
+      --blue-mid:    #7880c8;
+      --green:       #27ae60;
+      --green-hover: #1e8449;
+      --red:         #c0392b;
+      --red-hover:   #a93226;
+      --bg:          #ededf6;
+      --card-bg:     #ffffff;
+      --input-bg:    #f2f2f9;
+      --border:      #d4d5ed;
+      --label:       #8890bc;
+      --text:        #25263d;
+      --sub:         #5a5f8a;
+      --shadow:      0 6px 28px rgba(96,107,179,.13);
+      --radius:      14px;
+      --step-done:   #27ae60;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      min-height: 100vh;
+      color: var(--text);
+    }
+
+    /* ─── HEADER ─────────────────────────────── */
+    .header {
+      background: linear-gradient(135deg, #44498f 0%, #606bb3 55%, #6e78c4 100%);
+      padding: 0 40px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 2px 18px rgba(96,107,179,.35);
+    }
+    .logo-icon {
+      width: 38px; height: 38px;
+      background: linear-gradient(135deg,#fff3,#ffffff44);
+      border: 2px solid rgba(255,255,255,.45);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; color: white; font-weight: 900;
+    }
+    .logo-text { color: white; font-size: 17px; font-weight: 700; letter-spacing: 1.5px; }
+    .logo-text span { color: #d0d4f5; }
+    .header-right { margin-left: auto; color: #c8cbec; font-size: 13px; }
+    .header-right strong { color: white; }
+
+    /* ─── STEP BAR ───────────────────────────── */
+    .stepper-wrap {
+      background: white;
+      border-bottom: 1px solid var(--border);
+      padding: 24px 0 20px;
+    }
+    .stepper {
+      max-width: 780px;
+      margin: 0 auto;
+      display: flex;
+      align-items: flex-start;
+      padding: 0 20px;
+    }
+    .step-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+    .step-item:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 18px;
+      left: calc(50% + 18px);
+      right: calc(-50% + 18px);
+      height: 2px;
+      background: var(--border);
+      transition: background .4s;
+    }
+    .step-item.done:not(:last-child)::after { background: var(--step-done); }
+    .step-bubble {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700;
+      transition: background .3s, box-shadow .3s;
+    }
+    .step-bubble.inactive { background: #d8d9ee; color: #9a9cc0; }
+    .step-bubble.active   { background: var(--navy); color: white; box-shadow: 0 4px 14px rgba(96,107,179,.40); }
+    .step-bubble.done     { background: var(--step-done); color: white; font-size: 16px; }
+    .step-name {
+      margin-top: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      text-align: center;
+      color: #a8aac8;
+      letter-spacing: .4px;
+      text-transform: uppercase;
+    }
+    .step-name.active   { color: var(--navy); }
+    .step-name.done     { color: var(--step-done); }
+
+    /* ─── CARD ───────────────────────────────── */
+    .content { max-width: 620px; margin: 44px auto 80px; padding: 0 20px; }
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 42px 44px 36px;
+    }
+    .card-title {
+      font-size: 21px; font-weight: 800;
+      color: var(--navy); margin-bottom: 28px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .card-title-icon {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg,#eaebf8,#d4d6f0);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 17px;
+    }
+
+    /* ─── FORM ELEMENTS ──────────────────────── */
+    .form-group { margin-bottom: 20px; }
+    .form-row   { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+
+    label {
+      display: flex; align-items: center; gap: 5px;
+      font-size: 11px; font-weight: 700;
+      color: var(--label);
+      text-transform: uppercase; letter-spacing: .55px;
+      margin-bottom: 7px;
+    }
+    .req { width: 6px; height: 6px; border-radius: 50%; background: #e74c3c; display: inline-block; flex-shrink: 0; }
+
+    input, select {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 14px;
+      color: var(--text);
+      background: var(--input-bg);
+      transition: border-color .2s, box-shadow .2s, background .2s;
+      outline: none;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    input:focus, select:focus {
+      border-color: var(--navy);
+      background: white;
+      box-shadow: 0 0 0 3.5px rgba(96,107,179,.16);
+    }
+    input::placeholder { color: #c0c2dc; }
+    input:read-only {
+      background: #eeeef8;
+      color: var(--sub);
+      cursor: default;
+    }
+
+    .select-wrap { position: relative; }
+    .select-wrap::after {
+      content: '›';
+      position: absolute; right: 13px; top: 50%;
+      transform: translateY(-50%) rotate(90deg);
+      color: var(--label); pointer-events: none; font-size: 16px;
+    }
+
+    /* phone */
+    .phone-wrap {
+      display: flex;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      background: var(--input-bg);
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .phone-wrap:focus-within {
+      border-color: var(--navy);
+      background: white;
+      box-shadow: 0 0 0 3.5px rgba(96,107,179,.16);
+    }
+    .phone-prefix {
+      padding: 12px 12px 12px 14px;
+      background: #e2e3f3;
+      font-size: 14px; font-weight: 600;
+      color: var(--sub);
+      border-right: 1.5px solid var(--border);
+      white-space: nowrap;
+      display: flex; align-items: center;
+    }
+    .phone-wrap input {
+      border: none !important;
+      box-shadow: none !important;
+      border-radius: 0;
+      background: transparent !important;
+    }
+
+    .hint { font-size: 11px; color: var(--label); margin-top: 5px; }
+    .err  { font-size: 11px; color: #e74c3c; margin-top: 5px; }
+    .input-err { border-color: #e74c3c !important; }
+
+    /* ─── DIVIDER ────────────────────────────── */
+    .divider {
+      border: none; border-top: 1.5px solid var(--border);
+      margin: 26px 0;
+    }
+
+    /* ─── SECTION LABEL ─────────────────────── */
+    .section-label {
+      font-size: 10px; font-weight: 800;
+      color: var(--blue-mid);
+      text-transform: uppercase; letter-spacing: 1px;
+      margin-bottom: 16px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .section-label::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+
+    /* ─── BUTTONS ────────────────────────────── */
+    .btn-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 32px;
+      gap: 12px;
+    }
+    .btn-row-right { margin-left: auto; display: flex; gap: 12px; }
+
+    .btn {
+      padding: 12px 30px;
+      border-radius: 10px;
+      font-size: 14px; font-weight: 700;
+      border: none; cursor: pointer;
+      letter-spacing: .4px;
+      transition: all .2s;
+      display: flex; align-items: center; gap: 7px;
+    }
+    .btn-primary { background: var(--navy); color: white; }
+    .btn-primary:hover { background: var(--navy-hover); transform: translateY(-1px); box-shadow: 0 6px 18px rgba(96,107,179,.35); }
+    .btn-back    { background: var(--red); color: white; }
+    .btn-back:hover { background: var(--red-hover); }
+    .btn-green   { background: var(--green); color: white; }
+    .btn-green:hover { background: var(--green-hover); transform: translateY(-1px); box-shadow: 0 6px 14px rgba(39,174,96,.3); }
+
+    /* ─── SUMMARY CARD ───────────────────────── */
+    .summary-box {
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 28px 30px;
+      background: linear-gradient(160deg, #f9f9fe 0%, #f3f3fb 100%);
+    }
+    .summary-header { color: var(--navy); font-size: 19px; font-weight: 800; margin-bottom: 6px; }
+    .summary-meta   { font-size: 12.5px; color: var(--sub); margin-bottom: 2px; }
+    .summary-section { margin-top: 18px; }
+    .summary-key   { font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+    .summary-val   { font-size: 14px; color: var(--sub); }
+    .premium-val   { font-size: 22px; font-weight: 800; color: var(--navy); }
+
+    /* ─── SUCCESS ────────────────────────────── */
+    .success-wrap {
+      text-align: center; padding: 20px 0 10px;
+    }
+    .success-icon {
+      width: 80px; height: 80px; border-radius: 50%;
+      background: linear-gradient(135deg,#2ecc71,#27ae60);
+      margin: 0 auto 20px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 40px; color: white;
+      box-shadow: 0 8px 24px rgba(39,174,96,.3);
+    }
+    .success-title { font-size: 24px; font-weight: 800; color: var(--navy); margin-bottom: 10px; }
+    .success-sub   { font-size: 15px; color: var(--sub); margin-bottom: 6px; }
+    .policy-badge  {
+      display: inline-block;
+      background: linear-gradient(135deg,#eaebf8,#d6d8f0);
+      color: var(--navy); font-size: 17px; font-weight: 800;
+      padding: 10px 24px; border-radius: 10px;
+      margin: 16px 0 20px; letter-spacing: 1px;
+    }
+
+  </style>
+</head>
+<body>
+
+<div id="root"></div>
+
+<!-- React + Babel via CDN -->
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+<script type="text/babel">
+const { useState, useRef } = React;
+
+/* ── DATA ───────────────────────────────────────── */
+const VEHICLE_TYPES = [
+  'Motorcycle','Car','Van','Pickup','Truck','Bus','Tricycle',
+  'Three-Wheeler','Lorry','Heavy Vehicle','Boat','Jet Ski',
+];
+
+const ID_TYPES = [
+  { value: 'NIC',         label: 'National Identity Card' },
+  { value: 'PASSPORT',    label: 'Passport' },
+  { value: 'WORK_PERMIT', label: 'Work Permit' },
+];
+
+const ATOLLS = [
+  { id: 'Kaafu',        label: 'Kaafu (K)',          islands: ["Male'","Hulhumale'","Vilimale'","Thulusdhoo","Dhiffushi","Guraidhoo","Maafushi","Gulhi","Bodufolhudhoo","Funadhoo","Himmafushi","Kaashidhoo","Toddoo"] },
+  { id: 'Alif Alif',    label: 'Alif Alif (AA)',     islands: ['Rasdhoo','Thoddoo','Ukulhas','Mathiveri','Himandhoo','Feridhoo','Maalhos','Bodufolhudhoo'] },
+  { id: 'Alif Dhaal',   label: 'Alif Dhaal (ADh)',   islands: ['Mahibadhoo','Dhidhdhoo','Mandhoo','Dhangethi','Kunburudhoo','Maamigili','Omadhoo'] },
+  { id: 'Baa',          label: 'Baa (B)',             islands: ['Eydhafushi','Thulhaadhoo','Kendhoo','Dharavandhoo','Hithaadhoo','Kamadhoo','Maalhos','Goidhoo'] },
+  { id: 'Dhaalu',       label: 'Dhaalu (Dh)',         islands: ['Kudahuvadhoo','Bandidhoo','Hulhudheli','Maaenboodhoo','Rinbudhoo','Vaadhoo'] },
+  { id: 'Faafu',        label: 'Faafu (F)',           islands: ['Magoodhoo','Nilandhoo','Biledhdhoo','Feeali','Dharanboodhoo'] },
+  { id: 'Gaafu Alif',   label: 'Gaafu Alif (GA)',    islands: ['Vilingili','Kolamaafushi','Dhaandhoo','Kondey','Maamendhoo'] },
+  { id: 'Gaafu Dhaal',  label: 'Gaafu Dhaal (GDh)',  islands: ['Thinadhoo','Faresmaathodaa','Gadhdhoo','Hoadedhdhoo','Madaveli'] },
+  { id: 'Gnaviyani',    label: 'Gnaviyani (Gn)',      islands: ['Fuvahmulah'] },
+  { id: 'Haa Alif',     label: 'Haa Alif (HA)',       islands: ['Dhidhdhoo','Kelaa','Utheemu','Filladhoo','Hoarafushi','Ihavandhoo','Maarandhoo','Muraidhoo'] },
+  { id: 'Haa Dhaal',    label: 'Haa Dhaal (HDh)',     islands: ['Kulhudhuffushi','Nolhivaranfaru','Nolhivaram','Vaikaradhoo','Neykurendhoo','Hanimaadhoo'] },
+  { id: 'Laamu',        label: 'Laamu (L)',            islands: ['Fonadhoo','Hithadhoo','Gan','Isdhoo','Maamendhoo','Mundoo'] },
+  { id: 'Lhaviyani',    label: 'Lhaviyani (Lh)',      islands: ['Naifaru','Hinnavaru','Kurendhoo','Olhuvelifushi'] },
+  { id: 'Meemu',        label: 'Meemu (M)',            islands: ['Muli','Kolhufaafaru','Raiymandhoo','Dhiggaru','Naalaafushi','Madifushi'] },
+  { id: 'Noonu',        label: 'Noonu (N)',            islands: ['Manadhoo','Fodhdhoo','Kendhikulhudhoo','Holhudhdhoo','Miladhoo','Kudafari','Velidhoo'] },
+  { id: 'Raa',          label: 'Raa (R)',              islands: ['Ugoofaaru','Rasgetheemu','Innamaadhoo','Hulhudhuffaaru','Dhuvaafaru','Meedhoo','Alifushi'] },
+  { id: 'Seenu',        label: 'Seenu (S)',            islands: ['Hithadhoo','Feydhoo','Maradhoo','Hulhumeedhoo','Gan','Fonadhoo','Meedhoo'] },
+  { id: 'Shaviyani',    label: 'Shaviyani (Sh)',       islands: ['Funadhoo','Goidhoo','Noomaraa','Milandhoo','Kanditheemu','Komandoo','Maroshi'] },
+  { id: 'Thaa',         label: 'Thaa (Th)',            islands: ['Veymandoo','Gaadhiffushi','Thimarafushi','Hirilandhoo','Omadhoo','Guraidhoo','Vilufushi'] },
+  { id: 'Vaavu',        label: 'Vaavu (V)',            islands: ['Felidhoo','Keyodhoo','Thinadhoo','Fulidhoo','Rakeedhoo'] },
+];
+
+const STEPS = ['Vehicle Info','Owner Info','Policy Details','Payment'];
+
+/* ── HELPERS ─────────────────────────────────────── */
+function today() {
+  return new Date().toISOString().split('T')[0];
+}
+function addYearMinus1(dateStr) {
+  if (!dateStr) return '';
+  const d = new Date(dateStr);
+  d.setFullYear(d.getFullYear() + 1);
+  d.setDate(d.getDate() - 1);
+  return d.toISOString().split('T')[0];
+}
+function formatDate(d) {
+  if (!d) return '';
+  const [y,m,day] = d.split('-');
+  const months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+  return `${day}-${months[+m-1]}-${y}`;
+}
+function generatePolicy() {
+  const now = new Date();
+  const yy = String(now.getFullYear()).slice(-2);
+  const mm = String(now.getMonth()+1).padStart(2,'0');
+  const dd = String(now.getDate()).padStart(2,'0');
+  const rand = String(Math.floor(Math.random()*9000)+1000);
+  return `SOL${yy}${mm}${dd}${rand}`;
+}
+
+/* ── FIELD COMPONENT ─────────────────────────────── */
+function Field({ label, required, error, hint, children }) {
+  return (
+    <div className="form-group">
+      <label>
+        {required && <span className="req" />}
+        {label}
+      </label>
+      {children}
+      {hint  && <div className="hint">{hint}</div>}
+      {error && <div className="err">{error}</div>}
+    </div>
+  );
+}
+
+/* ── STEP INDICATOR ──────────────────────────────── */
+function Stepper({ current }) {
+  return (
+    <div className="stepper-wrap">
+      <div className="stepper">
+        {STEPS.map((name, i) => {
+          const state = i < current ? 'done' : i === current ? 'active' : 'inactive';
+          return (
+            <div key={name} className={`step-item ${state}`}>
+              <div className={`step-bubble ${state}`}>
+                {state === 'done' ? '✓' : i + 1}
+              </div>
+              <div className={`step-name ${state}`}>{name}</div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+/* ══ STEP 1 – Vehicle Info ═══════════════════════════ */
+function Step1({ data, onChange, onNext }) {
+  const [errors, setErrors] = useState({});
+
+  function validate() {
+    const e = {};
+    if (!data.vehicleType)   e.vehicleType = 'Please select a vehicle type.';
+    if (!data.vehicleNumber.trim()) e.vehicleNumber = 'Vehicle number is required.';
+    return e;
+  }
+
+  function handleNext() {
+    const e = validate();
+    if (Object.keys(e).length) { setErrors(e); return; }
+    setErrors({});
+    onNext();
+  }
+
+  return (
+    <div className="card">
+      <div className="card-title">
+        Vehicle Lookup
+      </div>
+
+      <Field label="Vehicle Type" required error={errors.vehicleType}>
+        <div className="select-wrap">
+          <select
+            className={errors.vehicleType ? 'input-err' : ''}
+            value={data.vehicleType}
+            onChange={e => { onChange('vehicleType', e.target.value); setErrors(p => ({...p, vehicleType: null})); }}
+          >
+            <option value="">-- Select Vehicle Type --</option>
+            {VEHICLE_TYPES.map(v => <option key={v} value={v}>{v}</option>)}
+          </select>
+        </div>
+      </Field>
+
+      <Field label="Vehicle Number" required error={errors.vehicleNumber}
+             hint={data.vehicleType ? `Enter the registration number of the ${data.vehicleType.toLowerCase()}` : 'Select a vehicle type first'}>
+        <input
+          className={errors.vehicleNumber ? 'input-err' : ''}
+          placeholder="e.g. C4A2345"
+          value={data.vehicleNumber}
+          onChange={e => { onChange('vehicleNumber', e.target.value.toUpperCase()); setErrors(p => ({...p, vehicleNumber: null})); }}
+        />
+      </Field>
+
+      <div className="btn-row">
+        <div className="btn-row-right">
+          <button className="btn btn-primary" onClick={handleNext}>
+            Next &nbsp;›
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ══ STEP 2 – Owner Information ══════════════════════ */
+function Step2({ data, onChange, onNext, onBack }) {
+  const [errors, setErrors] = useState({});
+
+  function validate() {
+    const e = {};
+    if (!data.ownerName.trim())   e.ownerName = 'Owner name is required.';
+    if (!data.idType)             e.idType = 'Select an identification type.';
+    if (!data.idNumber.trim())    e.idNumber = 'ID number is required.';
+    if (!data.address.trim())     e.address = 'Address is required.';
+    if (!data.atoll)              e.atoll = 'Select an atoll.';
+    if (!data.island)             e.island = 'Select an island.';
+    if (!data.mobile.trim())      e.mobile = 'Mobile number is required.';
+    else if (!/^\d{7}$/.test(data.mobile.trim())) e.mobile = 'Enter a valid 7-digit number.';
+    if (data.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) e.email = 'Enter a valid email address.';
+    return e;
+  }
+
+  function handleNext() {
+    const e = validate();
+    if (Object.keys(e).length) { setErrors(e); return; }
+    setErrors({});
+    onNext();
+  }
+
+  const selectedAtoll = ATOLLS.find(a => a.id === data.atoll);
+
+  function set(field, val) {
+    onChange(field, val);
+    setErrors(p => ({ ...p, [field]: null }));
+    if (field === 'atoll') { onChange('island', ''); }
+  }
+
+  const idLabel = ID_TYPES.find(t => t.value === data.idType)?.label || 'ID Number';
+
+  return (
+    <div className="card">
+      <div className="card-title">
+        <div className="card-title-icon">👤</div>
+        Owner Information
+      </div>
+
+      <div className="section-label">Personal Details</div>
+
+      <Field label="Owner Name" required error={errors.ownerName}>
+        <input className={errors.ownerName ? 'input-err' : ''}
+          placeholder="Full legal name"
+          value={data.ownerName}
+          onChange={e => set('ownerName', e.target.value)}
+        />
+      </Field>
+
+      <div className="form-row">
+        <Field label="Identification Type" required error={errors.idType}>
+          <div className="select-wrap">
+            <select className={errors.idType ? 'input-err' : ''}
+              value={data.idType}
+              onChange={e => set('idType', e.target.value)}
+            >
+              <option value="">-- Select Type --</option>
+              {ID_TYPES.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
+            </select>
+          </div>
+        </Field>
+
+        <Field label={data.idType === 'NIC' ? 'NIC Number' : data.idType === 'PASSPORT' ? 'Passport Number' : 'ID Number'}
+               required error={errors.idNumber}>
+          <input className={errors.idNumber ? 'input-err' : ''}
+            placeholder={data.idType === 'PASSPORT' ? 'e.g. A1234567' : 'e.g. A123456'}
+            value={data.idNumber}
+            onChange={e => set('idNumber', e.target.value.toUpperCase())}
+          />
+        </Field>
+      </div>
+
+      <hr className="divider" />
+      <div className="section-label">Address Details</div>
+
+      <Field label="Address" required error={errors.address}>
+        <input className={errors.address ? 'input-err' : ''}
+          placeholder="Street address / House name / Block"
+          value={data.address}
+          onChange={e => set('address', e.target.value)}
+        />
+      </Field>
+
+      <div className="form-row">
+        <Field label="Atoll" required error={errors.atoll}>
+          <div className="select-wrap">
+            <select className={errors.atoll ? 'input-err' : ''}
+              value={data.atoll}
+              onChange={e => set('atoll', e.target.value)}
+            >
+              <option value="">-- Select Atoll --</option>
+              {ATOLLS.map(a => <option key={a.id} value={a.id}>{a.label}</option>)}
+            </select>
+          </div>
+        </Field>
+
+        <Field label="Island" required error={errors.island}>
+          <div className="select-wrap">
+            <select className={errors.island ? 'input-err' : ''}
+              value={data.island}
+              disabled={!data.atoll}
+              onChange={e => set('island', e.target.value)}
+            >
+              <option value="">-- Select Island --</option>
+              {selectedAtoll?.islands.map(isl => <option key={isl} value={isl}>{isl}</option>)}
+            </select>
+          </div>
+        </Field>
+      </div>
+
+      <hr className="divider" />
+      <div className="section-label">Contact Details</div>
+
+      <div className="form-row">
+        <Field label="Mobile Number" required error={errors.mobile}>
+          <div className="phone-wrap">
+            <div className="phone-prefix">+960</div>
+            <input
+              className={errors.mobile ? 'input-err' : ''}
+              placeholder="7654321"
+              maxLength={7}
+              value={data.mobile}
+              onChange={e => set('mobile', e.target.value.replace(/\D/g,''))}
+            />
+          </div>
+        </Field>
+
+        <Field label="Email Address" error={errors.email}>
+          <input type="email"
+            className={errors.email ? 'input-err' : ''}
+            placeholder="owner@example.com"
+            value={data.email}
+            onChange={e => set('email', e.target.value)}
+          />
+        </Field>
+      </div>
+
+      <div className="btn-row">
+        <button className="btn btn-back" onClick={onBack}>‹ &nbsp;Back</button>
+        <button className="btn btn-primary" onClick={handleNext}>Next &nbsp;›</button>
+      </div>
+    </div>
+  );
+}
+
+/* ══ STEP 3 – Policy Details ═════════════════════════ */
+function Step3({ vehicle, owner, data, onChange, onNext, onBack }) {
+  const [errors, setErrors] = useState({});
+
+  function validate() {
+    const e = {};
+    if (!data.premium.trim())  e.premium = 'Premium amount is required.';
+    else if (isNaN(Number(data.premium)) || Number(data.premium) <= 0) e.premium = 'Enter a valid amount.';
+    if (!data.issuingDate)     e.issuingDate = 'Issuing date is required.';
+    if (!data.proposalNumber.trim()) e.proposalNumber = 'Proposal number is required.';
+    if (!data.periodFrom)      e.periodFrom = 'Period start date is required.';
+    return e;
+  }
+
+  function handleNext() {
+    const e = validate();
+    if (Object.keys(e).length) { setErrors(e); return; }
+    setErrors({});
+    onNext();
+  }
+
+  function set(field, val) {
+    onChange(field, val);
+    setErrors(p => ({ ...p, [field]: null }));
+    if (field === 'periodFrom') onChange('periodTo', addYearMinus1(val));
+  }
+
+  return (
+    <div className="card">
+      <div className="card-title">
+        <div className="card-title-icon">📋</div>
+        Policy Details
+      </div>
+
+      <div className="section-label">Vehicle &amp; Owner</div>
+
+      <div className="form-row">
+        <Field label="Vehicle">
+          <input readOnly value={`${vehicle.vehicleType} / ${vehicle.vehicleNumber}`} />
+        </Field>
+        <Field label="Owner">
+          <input readOnly value={owner.ownerName} />
+        </Field>
+      </div>
+
+      <hr className="divider" />
+      <div className="section-label">Policy Information</div>
+
+      <div className="form-row">
+        <Field label="Proposal Number" required error={errors.proposalNumber}>
+          <input className={errors.proposalNumber ? 'input-err' : ''}
+            placeholder="e.g. PROP-20250001"
+            value={data.proposalNumber}
+            onChange={e => set('proposalNumber', e.target.value)}
+          />
+        </Field>
+
+        <Field label="Issuing Date" required error={errors.issuingDate}>
+          <input type="date"
+            className={errors.issuingDate ? 'input-err' : ''}
+            value={data.issuingDate}
+            max={today()}
+            onChange={e => set('issuingDate', e.target.value)}
+          />
+        </Field>
+      </div>
+
+      <Field label="Premium Amount (MVR)" required error={errors.premium}>
+        <input type="number" min="0" step="0.01"
+          className={errors.premium ? 'input-err' : ''}
+          placeholder="0.00"
+          value={data.premium}
+          onChange={e => set('premium', e.target.value)}
+        />
+      </Field>
+
+      <div className="form-row">
+        <Field label="Period From" required error={errors.periodFrom}>
+          <input type="date"
+            className={errors.periodFrom ? 'input-err' : ''}
+            value={data.periodFrom}
+            onChange={e => set('periodFrom', e.target.value)}
+          />
+        </Field>
+
+        <Field label="Period To" hint="Auto-calculated: 1 year from start">
+          <input type="date" readOnly value={data.periodTo} />
+        </Field>
+      </div>
+
+      <div className="btn-row">
+        <button className="btn btn-back" onClick={onBack}>‹ &nbsp;Back</button>
+        <button className="btn btn-primary" onClick={handleNext}>Next &nbsp;›</button>
+      </div>
+    </div>
+  );
+}
+
+/* ══ STEP 4 – Payment ════════════════════════════════ */
+function Step4({ vehicle, owner, policy, policyNumber, onBack, onPay }) {
+  return (
+    <div className="card">
+      <div className="card-title">
+        <div className="card-title-icon">💳</div>
+        Payment Summary
+      </div>
+
+      <div className="summary-box">
+        <div className="summary-header">Third Party Motor Insurance</div>
+        <div className="summary-meta">{policyNumber}</div>
+        <div className="summary-meta">Period from: <strong>{formatDate(policy.periodFrom)}</strong></div>
+        <div className="summary-meta">Period to: <strong>{formatDate(policy.periodTo)}</strong></div>
+
+        <div className="summary-section">
+          <div className="summary-key">Vehicle</div>
+          <div className="summary-val">{vehicle.vehicleType} / {vehicle.vehicleNumber}</div>
+        </div>
+
+        <div className="summary-section">
+          <div className="summary-key">Premium</div>
+          <div className="premium-val">MVR {Number(policy.premium).toFixed(2)}</div>
+        </div>
+
+        <div className="summary-section">
+          <div className="summary-key">Customer</div>
+          <div className="summary-val">
+            {owner.ownerName} &nbsp;/&nbsp;
+            {owner.idNumber}
+          </div>
+        </div>
+
+        <div className="summary-section">
+          <div className="summary-key">Address</div>
+          <div className="summary-val">{owner.address}, {owner.island}, {owner.atoll} Atoll</div>
+        </div>
+
+        <div className="summary-section">
+          <div className="summary-key">Contact Details</div>
+          <div className="summary-val">
+            (+960) {owner.mobile}{owner.email ? ' / ' + owner.email : ''}
+          </div>
+        </div>
+
+        <div className="summary-section">
+          <div className="summary-key">Proposal Number</div>
+          <div className="summary-val">{policy.proposalNumber}</div>
+        </div>
+      </div>
+
+      <div className="btn-row" style={{ marginTop: '24px' }}>
+        <button className="btn btn-back" onClick={onBack}>‹ &nbsp;Back</button>
+        <div style={{ display: 'flex', gap: '12px' }}>
+          <button className="btn btn-green" onClick={() => onPay('credit')}>
+            Use Credit
+          </button>
+          <button className="btn btn-green" onClick={() => onPay('online')}>
+            Pay Now
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ══ SUCCESS ══════════════════════════════════════════ */
+function SuccessScreen({ policyNumber, onReset }) {
+  return (
+    <div className="card">
+      <div className="success-wrap">
+        <div className="success-icon">✓</div>
+        <div className="success-title">Policy Issued Successfully!</div>
+        <div className="success-sub">Your third-party motor insurance policy has been created.</div>
+        <div className="policy-badge">{policyNumber}</div>
+        <div className="success-sub">A confirmation has been sent to your registered email and mobile number.</div>
+        <div style={{ marginTop: '28px' }}>
+          <button className="btn btn-primary" onClick={onReset}>Create Another Policy</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ══ APP ══════════════════════════════════════════════ */
+function App() {
+  const [step, setStep] = useState(0);
+  const [done, setDone] = useState(false);
+  const [policyNumber] = useState(generatePolicy);
+
+  const [vehicle, setVehicle] = useState({ vehicleType: '', vehicleNumber: '' });
+  const [owner, setOwner] = useState({
+    ownerName: '', idType: 'NIC', idNumber: '',
+    address: '', atoll: 'Kaafu', island: '',
+    mobile: '', email: '',
+  });
+  const [policy, setPolicy] = useState({
+    premium: '', issuingDate: today(),
+    proposalNumber: '', periodFrom: '', periodTo: '',
+  });
+
+  function upd(setter) {
+    return (field, val) => setter(prev => ({ ...prev, [field]: val }));
+  }
+
+  function handlePay() { setDone(true); }
+  function handleReset() {
+    setStep(0); setDone(false);
+    setVehicle({ vehicleType: '', vehicleNumber: '' });
+    setOwner({ ownerName:'', idType:'NIC', idNumber:'', address:'', atoll:'Kaafu', island:'', mobile:'', email:'' });
+    setPolicy({ premium:'', issuingDate: today(), proposalNumber:'', periodFrom:'', periodTo:'' });
+  }
+
+  return (
+    <>
+      {/* Header */}
+      <header className="header">
+        <div className="logo-icon">S</div>
+        <div className="logo-text">SOLAR<span>ELLE</span> <span style={{fontWeight:400,color:'#c4c8f0',fontSize:'13px',letterSpacing:'0'}}>INSURANCE</span></div>
+        <div className="header-right">Logged in as &nbsp;<strong>Online User</strong></div>
+      </header>
+
+      {/* Stepper */}
+      {!done && <Stepper current={step} />}
+
+      {/* Content */}
+      <div className="content">
+        {done ? (
+          <SuccessScreen policyNumber={policyNumber} onReset={handleReset} />
+        ) : step === 0 ? (
+          <Step1 data={vehicle} onChange={upd(setVehicle)} onNext={() => setStep(1)} />
+        ) : step === 1 ? (
+          <Step2 data={owner} onChange={upd(setOwner)}
+                 onNext={() => setStep(2)} onBack={() => setStep(0)} />
+        ) : step === 2 ? (
+          <Step3 vehicle={vehicle} owner={owner} data={policy} onChange={upd(setPolicy)}
+                 onNext={() => setStep(3)} onBack={() => setStep(1)} />
+        ) : (
+          <Step4 vehicle={vehicle} owner={owner} policy={policy}
+                 policyNumber={policyNumber}
+                 onBack={() => setStep(2)} onPay={handlePay} />
+        )}
+      </div>
+
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
