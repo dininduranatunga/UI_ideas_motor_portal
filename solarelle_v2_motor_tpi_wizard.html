@@ -1,0 +1,795 @@
+<!--
+  ┌──────────────────────────────────────────────────────────────┐
+  │  SOLARELLE — Motor TPI Wizard                                │
+  │                                                              │
+  │  WHERE TO EDIT                                               │
+  │  Brand colour / radius  →  CSS :root  (top of <style>)      │
+  │  Vehicle types          →  CONFIG.vehicleTypes  (<script>)  │
+  │  Atolls & islands       →  CONFIG.islands        (<script>)  │
+  │  Step text / labels     →  HTML step comments below         │
+  └──────────────────────────────────────────────────────────────┘
+-->
+
+<style>
+
+/* ═══════════════════════════════════════════════════════════════
+   DESIGN TOKENS — change these to restyle the whole wizard
+   ═══════════════════════════════════════════════════════════════ */
+:root {
+  /* Brand colours */
+  --brand:        #606bb3;   /* primary purple  */
+  --brand-dark:   #596296;   /* hover / pressed */
+  --brand-light:  #eef0f9;   /* tinted bg / chips */
+  --page-bg:      #f3f4fa;   /* outer page fill  */
+
+  /* Borders */
+  --border: #d4d7ee;
+
+  /* Text */
+  --text:  #1a1c2e;
+  --muted: #6b7280;
+
+  /* Feedback */
+  --error:      #e24b4a;
+  --success:    #22883f;
+  --success-bg: #e8f5ed;
+
+  /* Elevation */
+  --shadow-card:  0 2px 12px rgba(96, 107, 179, 0.10),
+                  0 1px 3px  rgba(96, 107, 179, 0.07);
+  --shadow-input: 0 2px 8px  rgba(96, 107, 179, 0.08);
+
+  /* Shape */
+  --radius: 6px;
+}
+
+/* ── Reset ──────────────────────────────────────────────────────── */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-sans, system-ui);
+  background: var(--page-bg);
+  display: flex;
+  flex-direction: column;
+  min-height: 700px;
+}
+
+/* ── Top bar ────────────────────────────────────────────────────── */
+.topbar {
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+  padding: 0 32px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.logo         { display: flex; align-items: center; gap: 10px; }
+.logo-mark    { width: 34px; height: 34px; background: var(--brand); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+.logo-mark i  { color: #fff; font-size: 17px; }
+.logo-name    { font-size: 16px; font-weight: 500; color: var(--text); letter-spacing: -0.2px; }
+.logo-name span { color: var(--brand); }
+.logo-sub     { font-size: 11px; color: var(--muted); letter-spacing: 0.3px; }
+.user-chip    { display: flex; align-items: center; gap: 8px; background: var(--brand-light); border: 1px solid var(--border); border-radius: 20px; padding: 5px 12px 5px 6px; font-size: 13px; color: var(--text); }
+.user-av      { width: 26px; height: 26px; border-radius: 50%; background: var(--brand); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; }
+
+/* ── Breadcrumb (glassmorphism) ─────────────────────────────────── */
+.breadcrumb-bar {
+  background: rgba(255, 255, 255, 0.55);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(14px) saturate(1.6);
+  -webkit-backdrop-filter: blur(14px) saturate(1.6);
+  padding: 0 32px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 10;
+}
+.bc-inner { display: flex; align-items: stretch; max-width: 680px; margin: 0 auto; }
+.bc-step  { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 10px 6px 8px; position: relative; cursor: default; }
+
+/* connector line between steps */
+.bc-step:not(:last-child)::after {
+  content: ''; position: absolute;
+  top: 21px; left: calc(50% + 14px); right: calc(-50% + 14px);
+  height: 1px; background: var(--border); z-index: 0; transition: background 0.4s;
+}
+.bc-step.done:not(:last-child)::after { background: var(--brand); }
+
+.bc-dot {
+  width: 24px; height: 24px; border-radius: 50%;
+  border: 1.5px solid var(--border); background: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 500; color: var(--muted);
+  z-index: 1; position: relative; transition: all 0.3s;
+}
+.bc-step.active .bc-dot { border-color: var(--brand); background: var(--brand); color: #fff; box-shadow: 0 0 0 3px rgba(96, 107, 179, 0.15); }
+.bc-step.done   .bc-dot { border-color: var(--brand); background: var(--brand); color: #fff; }
+
+.bc-label-bot { font-size: 11px; color: var(--muted); margin-top: 5px; }
+.bc-step.active .bc-label-bot,
+.bc-step.done   .bc-label-bot { color: var(--brand); font-weight: 500; }
+.bc-step.active { border-bottom: 2px solid var(--brand); }
+
+/* ── Slide viewport ─────────────────────────────────────────────── */
+.viewport    { flex: 1; overflow: hidden; position: relative; }
+.track       { display: flex; width: 400%; transition: transform 0.55s cubic-bezier(0.77, 0, 0.18, 1); }
+.slide       { width: 25%; overflow-y: auto; padding: 28px 32px 80px; display: flex; flex-direction: column; align-items: center; }
+.slide-inner { width: 100%; max-width: 680px; }
+
+/* ── Slide header ───────────────────────────────────────────────── */
+.slide-hdr    { margin-bottom: 20px; }
+.slide-hdr h2 { font-size: 20px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+.slide-hdr p  { font-size: 13px; color: var(--muted); }
+
+/* ── Card ───────────────────────────────────────────────────────── */
+.card { background: #fff; border-radius: 10px; border: 1px solid var(--border); box-shadow: var(--shadow-card); padding: 24px; margin-bottom: 16px; }
+
+/* ── Section divider ────────────────────────────────────────────── */
+.sec-div      { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+.sec-div i    { font-size: 15px; color: var(--muted); }
+.sec-div span { font-size: 11px; font-weight: 500; color: var(--muted); letter-spacing: 0.5px; text-transform: uppercase; }
+
+/* ── Form grid ──────────────────────────────────────────────────── */
+.frow     { display: grid; gap: 14px; margin-bottom: 14px; }
+.frow.c2  { grid-template-columns: 1fr 1fr; }
+.frow.c3  { grid-template-columns: 1fr 1fr 1fr; }
+.frow.c13 { grid-template-columns: 1.4fr 1fr; }
+
+.field       { display: flex; flex-direction: column; gap: 5px; }
+.field label { font-size: 11px; font-weight: 500; color: var(--muted); letter-spacing: 0.3px; text-transform: uppercase; }
+.field label .req { color: var(--error); margin-left: 2px; }
+
+.field input,
+.field select {
+  height: 46px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0 14px;
+  font-size: 14px; color: var(--text); background: #fff;
+  outline: none; box-shadow: var(--shadow-input);
+  transition: border 0.2s, box-shadow 0.2s;
+  width: 100%;
+  appearance: none; -webkit-appearance: none;
+}
+.field select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b7280' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 14px center;
+  padding-right: 36px;
+}
+.field input:focus,
+.field select:focus   { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(96, 107, 179, 0.14), var(--shadow-input); }
+.field input::placeholder { color: #b0b5c4; }
+.field .err-msg           { font-size: 11px; color: var(--error); display: none; }
+.field.bad input,
+.field.bad select         { border-color: var(--error); box-shadow: 0 0 0 3px rgba(226, 75, 74, 0.12); }
+.field.bad .err-msg       { display: block; }
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0);    }
+  15%       { transform: translateX(-8px); }
+  30%       { transform: translateX( 8px); }
+  45%       { transform: translateX(-5px); }
+  60%       { transform: translateX( 5px); }
+  80%       { transform: translateX(-2px); }
+}
+.shake { animation: shake 0.42s ease; }
+
+/* ── Phone prefix input ─────────────────────────────────────────── */
+.ph-wrap {
+  display: flex; height: 46px;
+  border: 1.5px solid var(--border); border-radius: var(--radius);
+  overflow: hidden; box-shadow: var(--shadow-input);
+  background: #fff; transition: border 0.2s, box-shadow 0.2s;
+}
+.ph-wrap:focus-within { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(96, 107, 179, 0.14); }
+.ph-prefix {
+  padding: 0 12px; background: #f7f8fd;
+  border-right: 1.5px solid var(--border);
+  font-size: 13px; color: var(--muted); font-weight: 500;
+  display: flex; align-items: center; white-space: nowrap; flex-shrink: 0;
+}
+.ph-wrap input { border: none; box-shadow: none; border-radius: 0; flex: 1; padding: 0 12px; height: 100%; font-size: 14px; color: var(--text); outline: none; }
+.field.bad .ph-wrap { border-color: var(--error); box-shadow: 0 0 0 3px rgba(226, 75, 74, 0.12); }
+
+
+/* ── Step 1 side panel ──────────────────────────────────────────── */
+.step1-layout     { display: grid; grid-template-columns: 1fr 280px; gap: 16px; align-items: stretch; }
+.step1-left       { display: flex; flex-direction: column; }
+.step1-left .card { flex: 1; margin-bottom: 0; }
+.info-panel       { background: var(--brand-light); border: 1px solid var(--border); border-radius: 10px; padding: 20px; box-shadow: var(--shadow-card); }
+.info-panel-icon  { width: 48px; height: 48px; background: rgba(96, 107, 179, 0.12); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; }
+.info-panel-icon i { font-size: 22px; color: var(--brand); }
+.info-panel h3    { font-size: 14px; font-weight: 500; color: var(--text); text-align: center; margin-bottom: 8px; }
+.info-panel p     { font-size: 12px; color: var(--muted); text-align: center; line-height: 1.6; margin-bottom: 14px; }
+.cov-box          { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 12px; }
+.cov-box .cov-lbl { font-size: 9px; font-weight: 500; letter-spacing: 0.8px; text-transform: uppercase; color: var(--brand); margin-bottom: 6px; }
+.cov-box p        { font-size: 12px; color: var(--muted); line-height: 1.6; }
+
+/* ── Step 3 read-only fields ────────────────────────────────────── */
+.auto-fields input[readonly] { background: #f7f8fd; color: var(--muted); cursor: not-allowed; }
+
+/* ── Step 4 review ──────────────────────────────────────────────── */
+.review-layout   { display: grid; grid-template-columns: 1fr 260px; gap: 16px; align-items: start; }
+.policy-ref-chip { display: inline-flex; align-items: center; gap: 6px; background: var(--brand-light); border: 1px solid var(--border); border-radius: 6px; padding: 5px 12px; font-size: 12px; color: var(--brand); font-weight: 500; font-family: monospace; letter-spacing: 1px; margin-bottom: 12px; }
+.review-title    { font-size: 18px; font-weight: 500; color: var(--text); margin-bottom: 2px; }
+.review-dates    { font-size: 12px; color: var(--muted); margin-bottom: 16px; }
+.detail-grid     { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.detail-cell     { background: #fff; padding: 12px 14px; }
+.detail-cell .dk { font-size: 10px; font-weight: 500; letter-spacing: 0.6px; color: var(--muted); text-transform: uppercase; margin-bottom: 3px; }
+.detail-cell .dv { font-size: 13px; color: var(--text); font-weight: 500; }
+.detail-cell.full       { grid-column: span 2; }
+.detail-cell.highlight .dv { font-size: 18px; color: var(--brand); font-weight: 500; }
+
+.pay-panel           { background: #fff; border: 1px solid var(--border); border-radius: 10px; box-shadow: var(--shadow-card); padding: 20px; }
+.pay-panel .amt-lbl  { font-size: 11px; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; text-align: center; margin-bottom: 4px; }
+.pay-panel .amt-val  { font-size: 26px; font-weight: 500; color: var(--text); text-align: center; margin-bottom: 16px; }
+.pay-panel .amt-val sup { font-size: 14px; color: var(--muted); }
+
+.btn-pay-online      { width: 100%; height: 46px; background: var(--success); border: none; border-radius: var(--radius); color: #fff; font-size: 14px; font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background 0.2s; margin-bottom: 10px; }
+.btn-pay-online:hover { background: #1a6d31; }
+.or-div              { text-align: center; font-size: 12px; color: var(--muted); margin-bottom: 10px; }
+.btn-credit          { width: 100%; height: 46px; background: #fff; border: 1.5px solid var(--border); border-radius: var(--radius); color: var(--text); font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; }
+.btn-credit:hover    { border-color: var(--brand); color: var(--brand); }
+.ssl-note            { display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 11px; color: var(--muted); margin-top: 12px; }
+.policy-note         { font-size: 11px; color: var(--muted); text-align: center; margin-top: 10px; }
+
+/* ── Footer ─────────────────────────────────────────────────────── */
+.footer { background: #fff; border-top: 1px solid var(--border); box-shadow: 0 -2px 10px rgba(0,0,0,0.04); padding: 12px 32px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; position: fixed; bottom: 0; left: 0; right: 0; z-index: 20; }
+.btn             { height: 42px; min-width: 130px; border-radius: var(--radius); font-size: 13px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 7px; transition: all 0.2s; border: 1.5px solid; }
+.btn-back-footer { background: #fff; border-color: var(--border); color: var(--muted); }
+.btn-back-footer:hover { border-color: var(--brand); color: var(--brand); }
+.btn-next-footer { background: var(--brand); border-color: var(--brand); color: #fff; }
+.btn-next-footer:hover { background: var(--brand-dark); border-color: var(--brand-dark); }
+.btn:active      { transform: scale(0.97); }
+.step-ind        { font-size: 12px; color: var(--muted); letter-spacing: 0.1px; }
+
+</style>
+
+
+<div style="display:flex;flex-direction:column;min-height:700px;background:var(--page-bg)">
+
+  <!-- ── TOP BAR ──────────────────────────────────────────────── -->
+  <div class="topbar">
+    <div class="logo">
+      <div class="logo-mark"><i class="ti ti-shield-check" aria-hidden="true"></i></div>
+      <div>
+        <div class="logo-name"><span>SOLAR</span>ELLE <span style="color:var(--muted);font-size:12px;font-weight:400">INSURANCE</span></div>
+        <div class="logo-sub">Motor Insurance Portal</div>
+      </div>
+    </div>
+    <div class="user-chip"><div class="user-av">OU</div> Online User</div>
+  </div>
+
+  <!-- ── BREADCRUMB ───────────────────────────────────────────── -->
+  <div class="breadcrumb-bar">
+    <div class="bc-inner">
+      <div class="bc-step active" id="bc0">
+        <div class="bc-dot"><span class="sn">1</span><i class="ti ti-check" style="display:none;font-size:11px"></i></div>
+        <div class="bc-label-bot">Vehicle</div>
+      </div>
+      <div class="bc-step" id="bc1">
+        <div class="bc-dot"><span class="sn">2</span><i class="ti ti-check" style="display:none;font-size:11px"></i></div>
+        <div class="bc-label-bot">Owner</div>
+      </div>
+      <div class="bc-step" id="bc2">
+        <div class="bc-dot"><span class="sn">3</span><i class="ti ti-check" style="display:none;font-size:11px"></i></div>
+        <div class="bc-label-bot">Policy</div>
+      </div>
+      <div class="bc-step" id="bc3">
+        <div class="bc-dot"><span class="sn">4</span><i class="ti ti-check" style="display:none;font-size:11px"></i></div>
+        <div class="bc-label-bot">Payment</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="viewport">
+    <div class="track" id="track">
+
+      <!-- ══════════════════════════════════════════════════════
+           STEP 1 — Vehicle Lookup
+           ══════════════════════════════════════════════════════ -->
+      <div class="slide" id="s0">
+        <div class="slide-inner">
+          <div class="slide-hdr">
+            <h2>Vehicle Lookup</h2>
+            <p>Enter the vehicle details to begin your insurance application</p>
+          </div>
+          <div class="step1-layout">
+
+            <div class="step1-left">
+              <div class="card">
+                <div class="sec-div"><i class="ti ti-car" aria-hidden="true"></i><span>Vehicle Type</span></div>
+
+                <div class="frow c2">
+                  <div class="field" id="f-vtype">
+                    <label>Vehicle Type <span class="req">*</span></label>
+                    <!-- Options injected from CONFIG.vehicleTypes in <script> -->
+                    <select id="vtype">
+                      <option value="">-- Select Vehicle Type --</option>
+                    </select>
+                    <span class="err-msg">Please select a vehicle type.</span>
+                  </div>
+                  <div class="field" id="f-regno">
+                    <label> Registration Number <span class="req">*</span></label>
+                    <input id="regno" type="text" placeholder="e.g. C4A2345" maxlength="10" oninput="this.value=this.value.toUpperCase()">
+                    <span class="err-msg">Registration number is required.</span>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Info panel (right column) -->
+            <div class="info-panel">
+              <div class="info-panel-icon"><i class="ti ti-shield-check" aria-hidden="true"></i></div>
+              <h3>Third Party Motor Insurance</h3>
+              <p>Mandatory coverage for all registered vehicles in the Maldives. Quick online issuance in minutes.</p>
+              <div class="cov-box">
+                <div class="cov-lbl">Coverage includes</div>
+                <p>Third-party bodily injury &amp; property damage liability as required by law.</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════════════════
+           STEP 2 — Owner Information
+           ══════════════════════════════════════════════════════ -->
+      <div class="slide" id="s1">
+        <div class="slide-inner">
+          <div class="slide-hdr">
+            <h2>Owner Information</h2>
+            <p>Personal, address and contact details of the vehicle owner</p>
+          </div>
+
+          <!-- Personal details -->
+          <div class="card">
+            <div class="sec-div"><i class="ti ti-user" aria-hidden="true"></i><span>Personal Details</span></div>
+            <div class="frow c2">
+              <div class="field" id="f-fullname">
+                <label>Owner Full Name <span class="req">*</span></label>
+                <input id="fullname" type="text" placeholder="Full legal name as per ID">
+                <span class="err-msg">Full name is required.</span>
+              </div>
+              <div class="field" id="f-idtype">
+                <label>Identification Type <span class="req">*</span></label>
+                <select id="idtype">
+                  <option value="">-- Select ID Type --</option>
+                  <option value="NIC">National Identity Card</option>
+                  <option value="Passport">Passport</option>
+                  <option value="Driving Licence">Driving Licence</option>
+                  <option value="Company Reg">Company Registration</option>
+                </select>
+                <span class="err-msg">Please select an ID type.</span>
+              </div>
+            </div>
+            <div class="frow">
+              <div class="field" id="f-idnum">
+                <label>ID Number <span class="req">*</span></label>
+                <input id="idnum" type="text" placeholder="e.g. A123456">
+                <span class="err-msg">ID number is required.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Address -->
+          <div class="card">
+            <div class="sec-div"><i class="ti ti-map-pin" aria-hidden="true"></i><span>Address Details</span></div>
+            <div class="frow">
+              <div class="field" id="f-addr">
+                <label>Street Address / House <span class="req">*</span></label>
+                <input id="addr" type="text" placeholder="Street, house name or block number">
+                <span class="err-msg">Address is required.</span>
+              </div>
+            </div>
+            <div class="frow c2">
+              <div class="field" id="f-atoll">
+                <label>Atoll <span class="req">*</span></label>
+                <!-- Options injected from CONFIG.islands in <script> -->
+                <select id="atoll" onchange="loadIslands()">
+                  <option value="">-- Select Atoll --</option>
+                </select>
+                <span class="err-msg">Please select an atoll.</span>
+              </div>
+              <div class="field" id="f-island">
+                <label>Island <span class="req">*</span></label>
+                <select id="island">
+                  <option value="">Select an atoll first</option>
+                </select>
+                <span class="err-msg">Please select an island.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contact -->
+          <div class="card">
+            <div class="sec-div"><i class="ti ti-phone" aria-hidden="true"></i><span>Contact Details</span></div>
+            <div class="frow c2">
+              <div class="field" id="f-phone">
+                <label>Mobile Number <span class="req">*</span></label>
+                <div class="ph-wrap">
+                  <span class="ph-prefix">+960</span>
+                  <input id="phone" type="tel" placeholder="7654321" maxlength="7">
+                </div>
+                <span class="err-msg">Enter a valid 7-digit number.</span>
+              </div>
+              <div class="field" id="f-email">
+                <label>Email Address</label>
+                <input id="email" type="email" placeholder="owner@example.com">
+                <span class="err-msg">Enter a valid email.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════════════════
+           STEP 3 — Policy Details
+           ══════════════════════════════════════════════════════ -->
+      <div class="slide" id="s2">
+        <div class="slide-inner">
+          <div class="slide-hdr">
+            <h2>Policy Details</h2>
+            <p>Set the coverage period, premium and proposal reference</p>
+          </div>
+
+          <!-- Auto-filled summary fields -->
+          <div class="card auto-fields">
+            <div class="sec-div"><i class="ti ti-file-description" aria-hidden="true"></i><span>Policy Reference</span></div>
+            <div class="frow c2">
+              <div class="field">
+                <label>Vehicle</label>
+                <input id="disp-veh" readonly>
+              </div>
+              <div class="field">
+                <label>Owner</label>
+                <input id="disp-own" readonly>
+              </div>
+            </div>
+            <div class="frow c2">
+              <div class="field" id="f-propno">
+                <label>Proposal Number <span class="req">*</span></label>
+                <input id="propno" type="text" placeholder="e.g. PROP-20250001">
+                <span class="err-msg">Proposal number is required.</span>
+              </div>
+              <div class="field">
+                <label>Issuing Date</label>
+                <input id="issuedate" type="date" readonly style="background:#f7f8fd;color:var(--muted);cursor:not-allowed">
+              </div>
+            </div>
+          </div>
+
+          <!-- Premium & dates -->
+          <div class="card">
+            <div class="sec-div"><i class="ti ti-currency-dollar" aria-hidden="true"></i><span>Premium &amp; Coverage Period</span></div>
+            <div class="frow" id="f-prem-wrap">
+              <div class="field" id="f-prem">
+                <label>Premium Amount (MVR) <span class="req">*</span></label>
+                <input id="prem" type="number" placeholder="0.00" step="0.01" min="0">
+                <span class="err-msg">Please enter the premium amount.</span>
+              </div>
+            </div>
+            <div class="frow c2">
+              <div class="field" id="f-pfrom">
+                <label>Period From <span class="req">*</span></label>
+                <input id="pfrom" type="date" oninput="autoEndDate()">
+                <span class="err-msg">Start date is required.</span>
+              </div>
+              <div class="field">
+                <label>Period To <span style="font-size:10px;color:var(--muted);font-weight:400">(auto)</span></label>
+                <input id="pto" type="date" readonly style="background:#f7f8fd;color:var(--muted);cursor:not-allowed">
+              </div>
+            </div>
+            <div style="font-size:11px;color:var(--muted);margin-top:-8px">Auto: 1 year from start date</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════════════════
+           STEP 4 — Review & Payment
+           ══════════════════════════════════════════════════════ -->
+      <div class="slide" id="s3">
+        <div class="slide-inner">
+          <div class="slide-hdr">
+            <h2>Review &amp; Payment</h2>
+            <p>Confirm all details before completing your policy purchase</p>
+          </div>
+          <div class="review-layout">
+
+            <!-- Summary card -->
+            <div class="card" style="margin-bottom:0">
+              <div class="policy-ref-chip">
+                <i class="ti ti-file-certificate" aria-hidden="true" style="font-size:13px"></i>
+                <span id="r-polid">SOL-MTP-000000</span>
+              </div>
+              <div class="review-title">Third Party Motor Insurance</div>
+              <div class="review-dates" id="r-dates">—</div>
+              <div class="detail-grid">
+                <div class="detail-cell"><div class="dk">Vehicle Type</div><div class="dv" id="r-vtype">—</div></div>
+                <div class="detail-cell"><div class="dk">Registration</div><div class="dv" id="r-reg">—</div></div>
+                <div class="detail-cell full"><div class="dk">Owner</div><div class="dv" id="r-owner">—</div></div>
+                <div class="detail-cell full"><div class="dk">Address</div><div class="dv" id="r-addr">—</div></div>
+                <div class="detail-cell"><div class="dk">Mobile</div><div class="dv" id="r-mob">—</div></div>
+                <div class="detail-cell"><div class="dk">Email</div><div class="dv" id="r-email">—</div></div>
+                <div class="detail-cell"><div class="dk">Proposal No.</div><div class="dv" id="r-prop">—</div></div>
+                <div class="detail-cell"><div class="dk">Issuing Date</div><div class="dv" id="r-issue">—</div></div>
+                <div class="detail-cell full highlight"><div class="dk">Total Premium</div><div class="dv" id="r-prem">MVR —</div></div>
+              </div>
+            </div>
+
+            <!-- Payment panel -->
+            <div>
+              <div class="pay-panel">
+                <div style="font-size:14px;font-weight:500;color:var(--text);margin-bottom:4px">Complete Payment</div>
+                <div style="font-size:12px;color:var(--muted);margin-bottom:14px">Choose your preferred payment method below</div>
+                <div class="amt-lbl">Amount Due</div>
+                <div class="amt-val"><sup>MVR</sup> <span id="r-amt">0.00</span></div>
+                <button class="btn-pay-online" onclick="handlePay()"><i class="ti ti-check" aria-hidden="true"></i> Pay Online Now</button>
+                <div class="or-div">or</div>
+                <button class="btn-credit"><i class="ti ti-wallet" aria-hidden="true"></i> Use Account Credit</button>
+                <div class="ssl-note"><i class="ti ti-lock" aria-hidden="true" style="font-size:14px"></i> Secured by 256-bit SSL encryption</div>
+              </div>
+              <div class="policy-note">Policy will be issued immediately after payment</div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── FOOTER ───────────────────────────────────────────────── -->
+  <div class="footer">
+    <button class="btn btn-back-footer" id="btnBack" onclick="goBack()" style="visibility:hidden">
+      <i class="ti ti-chevron-left" aria-hidden="true"></i> Back
+    </button>
+    <span class="step-ind" id="step-name">Vehicle Info</span>
+    <button class="btn btn-next-footer" id="btnNext" onclick="goNext()">
+      Continue <i class="ti ti-chevron-right" aria-hidden="true"></i>
+    </button>
+  </div>
+
+</div>
+
+<!-- Toast notification -->
+<div id="toast" style="display:none;position:absolute;bottom:80px;right:24px;background:var(--brand);color:#fff;border-radius:8px;padding:12px 18px;font-size:13px;max-width:260px;z-index:99;box-shadow:0 4px 20px rgba(0,0,0,0.15)"></div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   CONFIG — edit your data here; no need to touch the logic below
+   ═══════════════════════════════════════════════════════════════ */
+const CONFIG = {
+
+  /* Vehicle type cards.
+     icon  = Tabler icon class (see tabler.io/icons)
+     label = display text & the value stored on the policy        */
+  vehicleTypes: [
+    { icon: 'ti-car',       label: 'Private Car'   },
+    { icon: 'ti-motorbike', label: 'Motorcycle'    },
+    { icon: 'ti-bus',       label: 'Van / Bus'     },
+    { icon: 'ti-truck',     label: 'Goods Vehicle' },
+  ],
+
+  /* Atolls → islands.
+     Add/remove atolls as keys.
+     List island names in the array; use [] if none are needed.  */
+  islands: {
+    'Malé City':    ['Malé', 'Hulhumalé', 'Villimalé'],
+    'Addu City':    ['Hithadhoo', 'Maradhoo', 'Feydhoo', 'Hulhumeedhoo'],
+    'Alif Alif':    ['Rasdhoo', 'Ukulhas', 'Thoddoo', 'Mathiveri'],
+    'Alif Dhaal':   ['Mahibadhoo', 'Maamigili', 'Dhangethi'],
+    'Baa':          ['Eydhafushi', 'Thulhaadhoo', 'Dharavandhoo', 'Kendhoo'],
+    'Dhaalu':       [],
+    'Faafu':        [],
+    'Gaafu Alif':   [],
+    'Gaafu Dhaalu': [],
+    'Haa Alif':     [],
+    'Haa Dhaalu':   [],
+    'Kaafu':        ['Thulusdhoo', 'Guraidhoo', 'Maafushi', 'Gaafaru'],
+    'Laamu':        ['Fonadhoo', 'Maamendhoo', 'Hithadhoo', 'Gan'],
+    'Lhaviyani':    [],
+    'Meemu':        [],
+    'Noonu':        [],
+    'Raa':          [],
+    'Seenu':        ['Hithadhoo', 'Feydhoo', 'Maradhoo-Feydhoo'],
+    'Shaviyani':    [],
+    'Thaa':         [],
+    'Vaavu':        [],
+  },
+};
+/* ─── END CONFIG ─────────────────────────────────────────────── */
+
+
+/* ── State ──────────────────────────────────────────────────────── */
+let cur = 0;
+const today = new Date().toISOString().split('T')[0];
+
+
+/* ── Build vehicle type dropdown from CONFIG ────────────────────── */
+(function initVehicleTypes() {
+  const sel = document.getElementById('vtype');
+  CONFIG.vehicleTypes.forEach(vt => {
+    const opt = document.createElement('option');
+    opt.value = vt.label;
+    opt.textContent = vt.label;
+    sel.appendChild(opt);
+  });
+})();
+
+
+/* ── Build atoll options from CONFIG ────────────────────────────── */
+(function initAtolls() {
+  const sel = document.getElementById('atoll');
+  Object.keys(CONFIG.islands).forEach(atoll => {
+    const opt = document.createElement('option');
+    opt.textContent = atoll;
+    sel.appendChild(opt);
+  });
+})();
+
+
+/* ── Island loader ──────────────────────────────────────────────── */
+function loadIslands() {
+  const atoll = document.getElementById('atoll').value;
+  const sel   = document.getElementById('island');
+  sel.innerHTML = '<option value="">Select island</option>';
+  const list = CONFIG.islands[atoll] || [];
+  if (list.length === 0) {
+    const o = document.createElement('option');
+    o.textContent = '—';
+    sel.appendChild(o);
+  } else {
+    list.forEach(name => {
+      const o = document.createElement('option');
+      o.textContent = name;
+      sel.appendChild(o);
+    });
+  }
+}
+
+
+/* ── Date setup ─────────────────────────────────────────────────── */
+document.getElementById('issuedate').value = today;
+document.getElementById('pfrom').min       = today;
+
+function autoEndDate() {
+  const v = document.getElementById('pfrom').value;
+  if (!v) return;
+  const d = new Date(v);
+  d.setFullYear(d.getFullYear() + 1);
+  document.getElementById('pto').value = d.toISOString().split('T')[0];
+}
+
+
+/* ── Validation helpers ─────────────────────────────────────────── */
+function shake(el) {
+  el.classList.remove('shake');
+  void el.offsetWidth;
+  el.classList.add('shake');
+  el.addEventListener('animationend', () => el.classList.remove('shake'), { once: true });
+}
+function bad(id) { const f = document.getElementById('f-' + id); if (f) { f.classList.add('bad'); shake(f); } return false; }
+function clr(id) { const f = document.getElementById('f-' + id); if (f) f.classList.remove('bad'); }
+
+['vtype','regno','fullname','idtype','idnum','addr','atoll','island','phone','email','propno','pfrom','prem'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) {
+    el.addEventListener('input',  () => clr(id));
+    el.addEventListener('change', () => clr(id));
+  }
+});
+
+function validate(step) {
+  let ok = true;
+  if (step === 0) {
+    if (!document.getElementById('vtype').value)           { bad('vtype');  ok = false; }
+    if (!document.getElementById('regno').value.trim())    { bad('regno');  ok = false; }
+  } else if (step === 1) {
+    if (!document.getElementById('fullname').value.trim()) { bad('fullname'); ok = false; }
+    if (!document.getElementById('idtype').value)          { bad('idtype');   ok = false; }
+    if (!document.getElementById('idnum').value.trim())    { bad('idnum');    ok = false; }
+    if (!document.getElementById('addr').value.trim())     { bad('addr');     ok = false; }
+    if (!document.getElementById('atoll').value)           { bad('atoll');    ok = false; }
+    if (!document.getElementById('island').value)          { bad('island');   ok = false; }
+    if (!/^\d{7}$/.test(document.getElementById('phone').value.trim())) { bad('phone'); ok = false; }
+  } else if (step === 2) {
+    if (!document.getElementById('propno').value.trim())   { bad('propno');   ok = false; }
+    if (!document.getElementById('pfrom').value)           { bad('pfrom');    ok = false; }
+    const pv = parseFloat(document.getElementById('prem').value);
+    if (isNaN(pv) || pv <= 0)                              { bad('prem');     ok = false; }
+  }
+  return ok;
+}
+
+
+/* ── Policy ID ──────────────────────────────────────────────────── */
+const pid = 'SOL' + Math.floor(Date.now() / 1000).toString().slice(-10).toUpperCase();
+
+
+/* ── Fill review step ───────────────────────────────────────────── */
+function fillReview() {
+  const regno  = document.getElementById('regno').value;
+  const owner  = document.getElementById('fullname').value;
+  const idtype = document.getElementById('idtype').value;
+  const idnum  = document.getElementById('idnum').value;
+  const addr   = document.getElementById('addr').value;
+  const atoll  = document.getElementById('atoll').value;
+  const island = document.getElementById('island').value;
+  const phone  = document.getElementById('phone').value;
+  const email  = document.getElementById('email').value;
+  const prop   = document.getElementById('propno').value;
+  const prem   = parseFloat(document.getElementById('prem').value) || 0;
+  const pfrom  = document.getElementById('pfrom').value;
+  const pto    = document.getElementById('pto').value;
+
+  const fmt = d => {
+    if (!d) return '—';
+    return new Date(d).toLocaleDateString('en-MV', { day: '2-digit', month: 'short', year: 'numeric' });
+  };
+
+  document.getElementById('r-polid').textContent = pid;
+  document.getElementById('r-vtype').textContent = document.getElementById('vtype').value || '—';
+  document.getElementById('r-reg').textContent   = regno || '—';
+  document.getElementById('r-dates').textContent = (pfrom ? fmt(pfrom) : '—') + ' → ' + (pto ? fmt(pto) : '—');
+  document.getElementById('r-owner').textContent = owner + (idtype && idnum ? ' / ' + idnum : '');
+  document.getElementById('r-addr').textContent  = [addr, island, atoll].filter(Boolean).join(', ') || '—';
+  document.getElementById('r-mob').textContent   = phone ? '+960 ' + phone : '—';
+  document.getElementById('r-email').textContent = email || '—';
+  document.getElementById('r-prop').textContent  = prop || '—';
+  document.getElementById('r-issue').textContent = fmt(today);
+  document.getElementById('r-prem').textContent  = 'MVR ' + prem.toFixed(2);
+  document.getElementById('r-amt').textContent   = prem.toFixed(2);
+  document.getElementById('disp-veh').value      = (document.getElementById('vtype').value || '') + (regno ? ' / ' + regno : '');
+  document.getElementById('disp-own').value      = owner || '';
+}
+
+
+/* ── Navigation ─────────────────────────────────────────────────── */
+const stepNames = ['Vehicle Info', 'Owner Info', 'Policy Details', 'Payment'];
+
+function moveTo(step) {
+  cur = step;
+  document.getElementById('track').style.transform        = 'translateX(-' + (step * 25) + '%)';
+  document.getElementById('step-name').textContent        = stepNames[step];
+  document.getElementById('btnBack').style.visibility     = step === 0 ? 'hidden' : 'visible';
+
+  const nb = document.getElementById('btnNext');
+  if (step === 3) {
+    nb.innerHTML = '<i class="ti ti-printer" aria-hidden="true"></i> Print Policy';
+    nb.onclick   = printPol;
+  } else {
+    nb.innerHTML = 'Continue <i class="ti ti-chevron-right" aria-hidden="true"></i>';
+    nb.onclick   = goNext;
+  }
+
+  document.querySelectorAll('[id^=bc]').forEach((el, i) => {
+    el.classList.remove('active', 'done');
+    const sn = el.querySelector('.sn');
+    const ic = el.querySelector('i');
+    if      (i < step)  { el.classList.add('done');   sn.style.display = 'none';  ic.style.display = 'block'; }
+    else if (i === step){ el.classList.add('active'); sn.style.display = 'block'; ic.style.display = 'none';  }
+    else                {                             sn.style.display = 'block'; ic.style.display = 'none';  }
+  });
+
+  document.getElementById('s' + step).scrollTop = 0;
+}
+
+function goNext() { if (!validate(cur)) return; if (cur === 2) fillReview(); moveTo(cur + 1); }
+function goBack() { if (cur > 0) moveTo(cur - 1); }
+
+
+/* ── Toast & stubs ──────────────────────────────────────────────── */
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.display = 'block';
+  clearTimeout(t._t);
+  t._t = setTimeout(() => t.style.display = 'none', 3000);
+}
+function handlePay() { toast('Redirecting to payment gateway...'); }
+function printPol()  { toast('Preparing policy document...'); }
+</script>
