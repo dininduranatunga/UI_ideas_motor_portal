@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Motor Third Party – Solarelle Insurance</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+/* ── RESET & TOKENS ─────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --brand:    #606bb3;
+  --brand-d:  #4f5899;
+  --brand-dd: #3d4480;
+  --brand-l:  #eaebf8;
+  --brand-xl: #f4f5fc;
+  --text:     #1a1a2e;
+  --sub:      #555;
+  --muted:    #999;
+  --input-bg: #f4f4f4;
+  --danger:   #e53e3e;
+  --success:  #2ecc71;
+  --bg:       #eef0f8;
+  --border:   #ddd;
+}
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* ── APP SHELL ───────────────────────────────── */
+.app-shell { display: flex; min-height: 100vh; }
+
+/* ── SIDEBAR ─────────────────────────────────── */
+.sidebar {
+  width: 288px; flex-shrink: 0;
+  background: linear-gradient(160deg, #606bb3 0%, #3d4480 100%);
+  display: flex; flex-direction: column;
+  padding: 36px 28px; position: relative; overflow: hidden;
+}
+.deco-blob-1 { position: absolute; top: -100px; right: -100px; width: 280px; height: 280px; border-radius: 50%; background: rgba(255,255,255,.07); }
+.deco-blob-2 { position: absolute; bottom: -80px; left: -80px; width: 240px; height: 240px; border-radius: 50%; background: rgba(255,255,255,.05); }
+.deco-ring   { position: absolute; top: 230px; left: 200px; width: 72px; height: 72px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,.12); }
+.deco-ring-sm{ position: absolute; top: 310px; left: 216px; width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(255,255,255,.08); }
+.deco-dots   { position: absolute; bottom: 130px; right: 22px; display: grid; grid-template-columns: repeat(5, 6px); gap: 7px; }
+.deco-dot    { width: 3px; height: 3px; border-radius: 50%; background: rgba(255,255,255,.18); }
+.deco-line-1 { position: absolute; bottom: 200px; left: 0; right: 0; height: 1px; background: rgba(255,255,255,.06); }
+
+.sb-logo { display: flex; align-items: center; gap: 11px; position: relative; z-index: 1; margin-bottom: 32px; }
+.sb-logo svg { width: 38px; height: 38px; flex-shrink: 0; }
+.sb-brand-name { font-size: 15px; font-weight: 800; color: #fff; letter-spacing: .8px; line-height: 1.1; }
+.sb-brand-name em { color: rgba(255,255,255,.6); font-style: normal; }
+.sb-brand-tag { font-size: 10px; color: rgba(255,255,255,.4); text-transform: uppercase; letter-spacing: 1px; margin-top: 1px; display: block; }
+
+.sb-user { display: flex; align-items: center; gap: 10px; position: relative; z-index: 1; padding: 10px 14px; margin-bottom: 36px; background: rgba(255,255,255,.1); border-radius: 10px; border: 1px solid rgba(255,255,255,.12); }
+.sb-user-av { width: 30px; height: 30px; border-radius: 50%; background: rgba(255,255,255,.18); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #fff; flex-shrink: 0; }
+.sb-user-nm   { font-size: 12px; font-weight: 600; color: rgba(255,255,255,.75); }
+.sb-user-role { font-size: 10px; color: rgba(255,255,255,.35); }
+
+.v-steps { position: relative; z-index: 1; flex: 1; }
+.v-step  { display: flex; gap: 14px; }
+.v-step-side { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+.v-dot {
+  width: 30px; height: 30px; border-radius: 50%;
+  border: 2px solid rgba(255,255,255,.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; color: rgba(255,255,255,.35);
+  transition: all .3s; flex-shrink: 0;
+}
+.v-dot.active { background: #fff; border-color: #fff; color: var(--brand-dd); box-shadow: 0 0 0 5px rgba(255,255,255,.15); }
+.v-dot.done   { background: rgba(255,255,255,.18); border-color: rgba(255,255,255,.5); color: #fff; }
+.v-connector  { width: 2px; flex: 1; min-height: 22px; background: rgba(255,255,255,.1); margin: 5px 0; }
+.v-step-info  { padding-top: 4px; flex: 1; }
+.v-label      { font-size: 13px; font-weight: 600; color: rgba(255,255,255,.35); transition: color .3s; margin-bottom: 2px; }
+.v-label.active { color: #fff; }
+.v-label.done   { color: rgba(255,255,255,.65); }
+.v-desc { font-size: 11px; color: rgba(255,255,255,.25); padding-bottom: 24px; }
+.v-step:last-child .v-desc { padding-bottom: 0; }
+
+.sb-footer { position: relative; z-index: 1; margin-top: auto; padding-top: 28px; }
+.sb-footer-rule  { height: 1px; background: rgba(255,255,255,.1); margin-bottom: 16px; }
+.sb-footer-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,.35); margin-bottom: 6px; }
+.sb-footer-text  { font-size: 12px; color: rgba(255,255,255,.25); line-height: 1.65; }
+
+/* ── MAIN AREA ───────────────────────────────── */
+.main { flex: 1; background: var(--bg); overflow-y: auto; display: flex; flex-direction: column; }
+.main-body {
+  max-width: 860px; width: 100%; margin: 0 auto;
+  padding: 40px 40px 80px; flex: 1;
+  display: flex; flex-direction: column;
+}
+
+/* ── MAIN PANEL (white card) ─────────────────── */
+.main-panel {
+  background: #fff;
+  box-shadow: 0 1px 6px rgba(0,0,0,.08);
+}
+
+/* ── FORM ZONE ───────────────────────────────── */
+.form-zone { position: relative; min-height: 360px; overflow: hidden; }
+
+/* ── STEP FORM ───────────────────────────────── */
+.sform { padding: 32px 36px 36px; }
+
+/* ── FIELD GROUP LABELS ──────────────────────── */
+.fgl {
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1.5px; color: var(--muted);
+  margin-bottom: 10px; margin-top: 26px;
+}
+.fgl:first-child { margin-top: 0; }
+
+/* ── GRID LAYOUTS ────────────────────────────── */
+.fg1 { display: grid; grid-template-columns: 1fr;           gap: 10px; margin-bottom: 10px; }
+.fg2 { display: grid; grid-template-columns: 1fr 1fr;       gap: 10px; margin-bottom: 10px; }
+.fg3 { display: grid; grid-template-columns: 1fr 1fr 1fr;   gap: 10px; margin-bottom: 10px; }
+.fg4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+.fs2 { grid-column: span 2; }
+.fs3 { grid-column: span 3; }
+.fs4 { grid-column: span 4; }
+
+/* ── FIELD ───────────────────────────────────── */
+.fi { display: flex; flex-direction: column; }
+.fi input,
+.fi select {
+  height: 52px;
+  background: var(--input-bg);
+  border: 1.5px solid transparent;
+  border-radius: 0;
+  padding: 0 16px;
+  font-size: 13px;
+  font-family: inherit;
+  color: var(--text);
+  outline: none;
+  appearance: none; -webkit-appearance: none;
+  transition: border-color .2s, background .2s;
+  width: 100%;
+}
+.fi input::placeholder { color: #aaa; font-size: 13px; text-transform: uppercase; letter-spacing: .3px; }
+.fi select { cursor: pointer; padding-right: 38px; color: #aaa; }
+.fi select.has-val { color: var(--text); }
+.fi input:focus,
+.fi select:focus { border-color: var(--brand); background: #fafafa; }
+.fi input[readonly] { color: var(--sub); cursor: default; }
+.fi input[readonly]:focus { border-color: transparent; background: var(--input-bg); }
+.fi input.err, .fi select.err { border-color: var(--danger); }
+.fi .err-msg  { font-size: 11px; color: var(--danger); margin-top: 4px; padding-left: 2px; }
+.fi .hint-msg { font-size: 11px; color: var(--muted);  margin-top: 4px; padding-left: 2px; }
+
+/* Select arrow */
+.sw { position: relative; }
+.sw::after {
+  content: '';
+  position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+  border: 5px solid transparent; border-top-color: #aaa;
+  margin-top: 2px; pointer-events: none;
+}
+
+/* Phone field */
+.ph-row {
+  display: flex; height: 52px;
+  border: 1.5px solid transparent;
+  background: var(--input-bg);
+  transition: border-color .2s, background .2s;
+}
+.ph-row:focus-within { border-color: var(--brand); background: #fafafa; }
+.ph-row.err { border-color: var(--danger); }
+.ph-pfx {
+  display: flex; align-items: center; padding: 0 12px;
+  font-size: 13px; font-weight: 600; color: var(--brand);
+  background: var(--brand-xl); border-right: 1.5px solid var(--border);
+  flex-shrink: 0; white-space: nowrap;
+}
+.ph-row input {
+  border: none !important; background: transparent !important;
+  flex: 1; height: 100%; padding: 0 14px;
+}
+.ph-row input:focus { border: none !important; background: transparent !important; }
+
+/* ── STEP ACTIONS ────────────────────────────── */
+.step-actions { display: flex; align-items: center; gap: 10px; padding-top: 24px; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  height: 46px; padding: 0 32px;
+  font-size: 14px; font-weight: 600; font-family: inherit;
+  border: none; cursor: pointer; transition: all .18s;
+  white-space: nowrap; border-radius: 0;
+}
+.btn-solid   { background: var(--brand); color: #fff; }
+.btn-solid:hover { background: var(--brand-d); }
+.btn-prev-btn { background: transparent; color: var(--sub); border: 1.5px solid #ccc; }
+.btn-prev-btn:hover { border-color: var(--brand); color: var(--brand); }
+.btn-success { background: var(--success); color: #fff; }
+.btn-success:hover { background: #27ae60; }
+.btn-outline { background: transparent; border: 1.5px solid var(--brand); color: var(--brand); }
+.btn-outline:hover { background: var(--brand-xl); }
+.btn-full { width: 100%; }
+
+/* ── PAYMENT LAYOUT ──────────────────────────── */
+.pay-layout { display: grid; grid-template-columns: 1fr 260px; gap: 20px; }
+.pay-summary { background: #f9f9f9; padding: 20px; border: 1px solid var(--border); }
+.ps-label  { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--brand); margin-bottom: 4px; }
+.ps-type   { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+.ps-period { font-size: 13px; color: var(--sub); margin-bottom: 16px; }
+.sum-table { border: 1px solid var(--border); }
+.sum-row { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--border); }
+.sum-row:last-child { border-bottom: none; }
+.sum-cell { padding: 10px 12px; border-right: 1px solid var(--border); }
+.sum-cell:last-child { border-right: none; }
+.sum-cell.full { grid-column: span 2; }
+.sum-cell.hl { background: var(--brand-xl); }
+.sk { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .8px; margin-bottom: 3px; }
+.sv { font-size: 13px; font-weight: 600; color: var(--text); }
+.sv-big { font-size: 20px; font-weight: 800; color: var(--brand); }
+.pay-panel { border: 1px solid var(--border); }
+.pay-panel-head { background: var(--brand); color: #fff; padding: 14px 18px; }
+.pph-title { font-size: 14px; font-weight: 700; }
+.pph-sub   { font-size: 12px; opacity: .8; margin-top: 2px; }
+.pay-panel-body { padding: 18px; }
+.amt-row { background: var(--brand-xl); padding: 16px; text-align: center; margin-bottom: 16px; }
+.amt-lbl  { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 4px; }
+.amt-val  { font-size: 26px; font-weight: 800; color: var(--brand); }
+.amt-curr { font-size: 13px; font-weight: 600; }
+.or-sep { position: relative; text-align: center; margin: 12px 0; }
+.or-sep::before { content:''; position:absolute; top:50%; left:0; right:0; height:1px; background:var(--border); }
+.or-sep span { position:relative; background:#fff; padding:0 10px; font-size:12px; color:var(--muted); }
+.secure-row { display:flex; align-items:center; gap:6px; justify-content:center; margin-top:12px; font-size:11px; color:var(--muted); }
+
+/* ── SUCCESS ─────────────────────────────────── */
+.success-panel { padding: 48px 36px; }
+.success-top { display: flex; align-items: flex-start; gap: 32px; margin-bottom: 32px; }
+.ok-circle {
+  width: 60px; height: 60px; border-radius: 50%;
+  background: #e8f8ee; border: 2px solid var(--success);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; color: var(--success); flex-shrink: 0;
+}
+.ok-title { font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 8px; }
+.ok-body  { font-size: 14px; color: var(--sub); line-height: 1.7; margin-bottom: 6px; }
+.cert-card { border: 1px solid var(--brand-l); background: var(--brand-xl); }
+.cert-head {
+  background: var(--brand); padding: 14px 20px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.cert-head-tag { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,.7); }
+.cert-head-num { font-size: 16px; font-weight: 800; color: #fff; }
+.cert-rows { display: grid; grid-template-columns: 1fr 1fr; }
+.cert-row { padding: 12px 16px; border-bottom: 1px solid rgba(96,107,179,.15); border-right: 1px solid rgba(96,107,179,.15); }
+.cert-row:nth-child(even) { border-right: none; }
+.cert-row.full { grid-column: span 2; border-right: none; }
+.cert-row:last-child, .cert-row:nth-last-child(2):nth-child(odd) { border-bottom: none; }
+.ck { font-size: 10px; text-transform: uppercase; letter-spacing: .8px; color: var(--brand); margin-bottom: 3px; }
+.cv { font-size: 13px; font-weight: 600; color: var(--text); }
+.cv-hl { font-size: 18px; font-weight: 800; color: var(--brand); }
+
+/* ── TRANSITIONS ─────────────────────────────── */
+.slide-forward-enter-active, .slide-forward-leave-active,
+.slide-back-enter-active,    .slide-back-leave-active {
+  transition: transform .38s cubic-bezier(.4,0,.2,1), opacity .38s cubic-bezier(.4,0,.2,1);
+  position: absolute; width: 100%; top: 0; left: 0;
+}
+.slide-forward-enter-from { transform: translateX(100%);  opacity: 0; }
+.slide-forward-leave-to   { transform: translateX(-100%); opacity: 0; }
+.slide-back-enter-from    { transform: translateX(-100%); opacity: 0; }
+.slide-back-leave-to      { transform: translateX(100%);  opacity: 0; }
+.fade-up-enter-active { transition: transform .4s ease, opacity .4s ease; }
+.fade-up-enter-from   { transform: translateY(20px); opacity: 0; }
+
+/* ── RESPONSIVE ≤ 868px ──────────────────────── */
+@media (max-width: 885px) {
+  /* Sidebar collapses to 56px icon strip */
+  .sidebar { width: 56px; padding: 20px 0; align-items: center; overflow: hidden; }
+  .sb-logo { justify-content: center; gap: 0; margin-bottom: 20px; }
+  .sb-logo > div { display: none; }
+  .sb-user { justify-content: center; padding: 8px; margin-bottom: 20px; gap: 0; }
+  .sb-user > div:last-child { display: none; }
+  .v-steps { display: flex; flex-direction: column; align-items: center; width: 100%; }
+  .v-step  { flex-direction: column; align-items: center; gap: 0; }
+  .v-step-info { display: none; }
+  .v-connector { margin: 4px 0; }
+  .sb-footer, .deco-dots, .deco-line-1 { display: none; }
+
+  /* Main area */
+  .main-body { padding: 20px 12px 40px; }
+  .sform { padding: 20px 16px 24px; }
+  .form-zone { min-height: 480px; }
+
+  /* Grids → single column */
+  .fg2, .fg3, .fg4 { grid-template-columns: 1fr; }
+  .fs2, .fs3, .fs4 { grid-column: 1 / -1; }
+
+  /* Payment */
+  .pay-layout { grid-template-columns: 1fr; }
+
+  /* Buttons */
+  .step-actions { flex-direction: column; align-items: stretch; }
+  .step-actions .btn { width: 100%; }
+
+  /* Success */
+  .success-panel { padding: 24px 16px; }
+  .success-top { flex-direction: column; gap: 16px; }
+  .cert-rows { grid-template-columns: 1fr; }
+  .cert-row { border-right: none; }
+  .cert-row.full { grid-column: 1 / -1; }
+}
+
+@media (max-width: 480px) {
+  .fi input, .fi select { height: 48px; font-size: 12px; }
+  .ph-row { height: 48px; }
+  .sum-row { grid-template-columns: 1fr; }
+  .sum-cell { border-right: none; }
+  .amt-val { font-size: 20px; }
+  .sv-big  { font-size: 16px; }
+}
+  </style>
+</head>
+<body>
+
+<div id="app">
+<div class="app-shell">
+
+  <!-- ══ SIDEBAR ══════════════════════════════ -->
+  <aside class="sidebar">
+    <div class="deco-blob-1"></div><div class="deco-blob-2"></div>
+    <div class="deco-ring"></div><div class="deco-ring-sm"></div>
+    <div class="deco-line-1"></div>
+    <div class="deco-dots"><div class="deco-dot" v-for="n in 20" :key="n"></div></div>
+
+    <!-- Logo -->
+    <div class="sb-logo">
+      <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="40" height="40" rx="10" fill="rgba(255,255,255,.15)"/>
+        <path d="M8 22c3-4 5-4 8 0s5 4 8 0 5-4 8 0" stroke="#fff" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+        <path d="M8 27c3-4 5-4 8 0s5 4 8 0 5-4 8 0" stroke="#fff" stroke-width="2.2" stroke-linecap="round" fill="none" opacity=".4"/>
+        <path d="M20 8l2 5h5l-4 3 1.5 5L20 18l-4.5 3 1.5-5-4-3h5z" fill="#fff" opacity=".85"/>
+      </svg>
+      <div>
+        <div class="sb-brand-name">SOLAR<em>ELLE</em></div>
+        <span class="sb-brand-tag">Insurance</span>
+      </div>
+    </div>
+
+    <!-- User -->
+    <div class="sb-user">
+      <div class="sb-user-av">OU</div>
+      <div>
+        <div class="sb-user-nm">Online User</div>
+        <div class="sb-user-role">Motor Portal</div>
+      </div>
+    </div>
+
+    <!-- Step nav -->
+    <nav class="v-steps" v-if="!done">
+      <div class="v-step" v-for="(s, i) in stepMeta" :key="i">
+        <div class="v-step-side">
+          <div :class="['v-dot', stepState(i)]">
+            <span v-if="stepState(i)==='done'">✓</span>
+            <span v-else>{{i+1}}</span>
+          </div>
+          <div class="v-connector" v-if="i < stepMeta.length - 1"></div>
+        </div>
+        <div class="v-step-info">
+          <div :class="['v-label', stepState(i)]">{{s.label}}</div>
+          <div class="v-desc">{{s.desc}}</div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Footer -->
+    <div class="sb-footer">
+      <div class="sb-footer-rule"></div>
+      <div class="sb-footer-title">Motor Insurance Portal</div>
+      <div class="sb-footer-text">Mandatory third-party coverage for all registered vehicles in the Maldives.</div>
+    </div>
+  </aside>
+
+  <!-- ══ MAIN ══════════════════════════════════ -->
+  <main class="main">
+    <div class="main-body">
+
+      <!-- WIZARD PANEL -->
+      <div class="main-panel" v-if="!done">
+        <div class="form-zone">
+          <transition :name="transitionName" mode="out-in">
+            <keep-alive>
+
+              <!-- ══ STEP 1 — Vehicle ══════════════════ -->
+              <div v-if="step===0" key="s0" class="sform">
+                <div class="fgl">Vehicle Information</div>
+                <div class="fg2">
+                  <div class="fi">
+                    <div class="sw">
+                      <select v-model="vehicle.vehicleType"
+                              :class="[vehicle.vehicleType ? 'has-val' : '', errors.vehicleType ? 'err' : '']">
+                        <option value="" disabled>VEHICLE TYPE *</option>
+                        <option v-for="t in vehicleTypes" :key="t" :value="t">{{t}}</option>
+                      </select>
+                    </div>
+                    <div class="err-msg" v-if="errors.vehicleType">{{errors.vehicleType}}</div>
+                  </div>
+                  <div class="fi">
+                    <input v-model="vehicle.vehicleNumber"
+                           :class="{'err': errors.vehicleNumber}"
+                           placeholder="VEHICLE REGISTRATION NO. *"
+                           @input="vehicle.vehicleNumber = vehicle.vehicleNumber.toUpperCase()" />
+                    <div class="err-msg" v-if="errors.vehicleNumber">{{errors.vehicleNumber}}</div>
+                    <div class="hint-msg" v-if="!errors.vehicleNumber && vehicle.vehicleType">
+                      Registration number of the {{vehicle.vehicleType.toLowerCase()}}
+                    </div>
+                  </div>
+                </div>
+                <div class="step-actions">
+                  <button class="btn btn-solid" @click="nextStep">Next &nbsp;›</button>
+                </div>
+              </div>
+
+              <!-- ══ STEP 2 — Owner ═══════════════════ -->
+              <div v-else-if="step===1" key="s1" class="sform">
+                <div class="fgl">Personal Details</div>
+                <div class="fg3">
+                  <div class="fi fs2">
+                    <input v-model="owner.ownerName" :class="{'err':errors.ownerName}"
+                           placeholder="OWNER FULL NAME *" />
+                    <div class="err-msg" v-if="errors.ownerName">{{errors.ownerName}}</div>
+                  </div>
+                  <div class="fi">
+                    <div class="sw">
+                      <select v-model="owner.idType"
+                              :class="[errors.idType ? 'err' : '', owner.idType ? 'has-val' : '']">
+                        <option value="" disabled>IDENTIFICATION TYPE *</option>
+                        <option v-for="t in idTypes" :key="t.value" :value="t.value">{{t.label}}</option>
+                      </select>
+                    </div>
+                    <div class="err-msg" v-if="errors.idType">{{errors.idType}}</div>
+                  </div>
+                  <div class="fi fs3">
+                    <input v-model="owner.idNumber" :class="{'err':errors.idNumber}"
+                           :placeholder="(idLabel || 'ID NUMBER') + ' *'"
+                           @input="owner.idNumber = owner.idNumber.toUpperCase()" />
+                    <div class="err-msg" v-if="errors.idNumber">{{errors.idNumber}}</div>
+                  </div>
+                </div>
+
+                <div class="fgl">Address Details</div>
+                <div class="fg3">
+                  <div class="fi fs3">
+                    <input v-model="owner.address" :class="{'err':errors.address}"
+                           placeholder="STREET ADDRESS / HOUSE *" />
+                    <div class="err-msg" v-if="errors.address">{{errors.address}}</div>
+                  </div>
+                  <div class="fi">
+                    <div class="sw">
+                      <select v-model="owner.atoll"
+                              :class="[errors.atoll ? 'err' : '', owner.atoll ? 'has-val' : '']"
+                              @change="owner.island = ''">
+                        <option value="" disabled>ATOLL *</option>
+                        <option v-for="a in atolls" :key="a.id" :value="a.id">{{a.label}}</option>
+                      </select>
+                    </div>
+                    <div class="err-msg" v-if="errors.atoll">{{errors.atoll}}</div>
+                  </div>
+                  <div class="fi fs2">
+                    <div class="sw">
+                      <select v-model="owner.island"
+                              :class="[errors.island ? 'err' : '', owner.island ? 'has-val' : '']"
+                              :disabled="!owner.atoll">
+                        <option value="" disabled>{{owner.atoll ? 'ISLAND *' : 'SELECT ATOLL FIRST'}}</option>
+                        <option v-for="isl in selectedIslands" :key="isl" :value="isl">{{isl}}</option>
+                      </select>
+                    </div>
+                    <div class="err-msg" v-if="errors.island">{{errors.island}}</div>
+                  </div>
+                </div>
+
+                <div class="fgl">Contact Details</div>
+                <div class="fg3">
+                  <div class="fi">
+                    <div :class="['ph-row', errors.mobile ? 'err' : '']">
+                      <div class="ph-pfx">+960</div>
+                      <input v-model="owner.mobile" placeholder="MOBILE NO. *" maxlength="7"
+                             @input="owner.mobile = owner.mobile.replace(/\D/g,'')" />
+                    </div>
+                    <div class="err-msg" v-if="errors.mobile">{{errors.mobile}}</div>
+                  </div>
+                  <div class="fi fs2">
+                    <input type="email" v-model="owner.email" :class="{'err':errors.email}"
+                           placeholder="E-MAIL ADDRESS" />
+                    <div class="err-msg" v-if="errors.email">{{errors.email}}</div>
+                  </div>
+                </div>
+
+                <div class="step-actions">
+                  <button class="btn btn-prev-btn" @click="prevStep">‹ &nbsp;Previous</button>
+                  <button class="btn btn-solid"    @click="nextStep">Next &nbsp;›</button>
+                </div>
+              </div>
+
+              <!-- ══ STEP 3 — Policy ══════════════════ -->
+              <div v-else-if="step===2" key="s2" class="sform">
+                <div class="fgl">Policy Reference</div>
+                <div class="fg4">
+                  <div class="fi fs2">
+                    <input readonly :value="vehicle.vehicleType + ' / ' + vehicle.vehicleNumber" placeholder="VEHICLE" />
+                  </div>
+                  <div class="fi fs2">
+                    <input readonly :value="owner.ownerName" placeholder="OWNER" />
+                  </div>
+                  <div class="fi fs2">
+                    <input v-model="policy.proposalNumber" :class="{'err':errors.proposalNumber}"
+                           placeholder="PROPOSAL NUMBER *" />
+                    <div class="err-msg" v-if="errors.proposalNumber">{{errors.proposalNumber}}</div>
+                  </div>
+                  <div class="fi fs2">
+                    <input type="date" v-model="policy.issuingDate" :class="{'err':errors.issuingDate}"
+                           :max="todayStr" />
+                    <div class="hint-msg">ISSUING DATE *</div>
+                    <div class="err-msg" v-if="errors.issuingDate">{{errors.issuingDate}}</div>
+                  </div>
+                </div>
+
+                <div class="fgl">Premium &amp; Coverage Period</div>
+                <div class="fg4">
+                  <div class="fi fs2">
+                    <input type="number" v-model="policy.premium" :class="{'err':errors.premium}"
+                           placeholder="CONTRIBUTION / PREMIUM (MVR) *" min="0" step="0.01" />
+                    <div class="err-msg" v-if="errors.premium">{{errors.premium}}</div>
+                  </div>
+                  <div class="fi">
+                    <input type="date" v-model="policy.periodFrom" :class="{'err':errors.periodFrom}"
+                           @change="updatePeriodTo" />
+                    <div class="hint-msg">PERIOD FROM *</div>
+                    <div class="err-msg" v-if="errors.periodFrom">{{errors.periodFrom}}</div>
+                  </div>
+                  <div class="fi">
+                    <input type="date" readonly :value="policy.periodTo" />
+                    <div class="hint-msg">PERIOD TO (auto)</div>
+                  </div>
+                </div>
+
+                <div class="step-actions">
+                  <button class="btn btn-prev-btn" @click="prevStep">‹ &nbsp;Previous</button>
+                  <button class="btn btn-solid"    @click="nextStep">Next &nbsp;›</button>
+                </div>
+              </div>
+
+              <!-- ══ STEP 4 — Payment ═════════════════ -->
+              <div v-else-if="step===3" key="s3" class="sform">
+                <div class="pay-layout">
+                  <div class="pay-summary">
+                    <div class="ps-label">{{policyNumber}}</div>
+                    <div class="ps-type">Motor Third Party Insurance</div>
+                    <div class="ps-period">{{fmtDate(policy.periodFrom)}} → {{fmtDate(policy.periodTo)}}</div>
+                    <div class="sum-table">
+                      <div class="sum-row">
+                        <div class="sum-cell"><div class="sk">Vehicle Type</div><div class="sv">{{vehicle.vehicleType}}</div></div>
+                        <div class="sum-cell"><div class="sk">Registration</div><div class="sv">{{vehicle.vehicleNumber}}</div></div>
+                      </div>
+                      <div class="sum-row">
+                        <div class="sum-cell full"><div class="sk">Owner</div><div class="sv">{{owner.ownerName}} / {{owner.idNumber}}</div></div>
+                      </div>
+                      <div class="sum-row">
+                        <div class="sum-cell full"><div class="sk">Address</div><div class="sv">{{owner.address}}, {{owner.island}}, {{owner.atoll}}</div></div>
+                      </div>
+                      <div class="sum-row">
+                        <div class="sum-cell"><div class="sk">Mobile</div><div class="sv">+960 {{owner.mobile}}</div></div>
+                        <div class="sum-cell"><div class="sk">Email</div><div class="sv">{{owner.email || '—'}}</div></div>
+                      </div>
+                      <div class="sum-row">
+                        <div class="sum-cell"><div class="sk">Proposal No.</div><div class="sv">{{policy.proposalNumber}}</div></div>
+                        <div class="sum-cell"><div class="sk">Issuing Date</div><div class="sv">{{fmtDate(policy.issuingDate)}}</div></div>
+                      </div>
+                      <div class="sum-row">
+                        <div class="sum-cell full hl"><div class="sk">Total Premium</div><div class="sv-big">MVR {{Number(policy.premium).toFixed(2)}}</div></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="pay-panel">
+                    <div class="pay-panel-head">
+                      <div class="pph-title">Complete Payment</div>
+                      <div class="pph-sub">Choose a payment method</div>
+                    </div>
+                    <div class="pay-panel-body">
+                      <div class="amt-row">
+                        <div class="amt-lbl">Amount Due</div>
+                        <div class="amt-val"><span class="amt-curr">MVR &nbsp;</span>{{Number(policy.premium).toFixed(2)}}</div>
+                      </div>
+                      <button class="btn btn-success btn-full" @click="finish">✓ &nbsp;Pay Online Now</button>
+                      <div class="or-sep"><span>or</span></div>
+                      <button class="btn btn-outline btn-full" @click="finish">Use Account Credit</button>
+                      <div class="secure-row">🔒 Secured by 256-bit SSL encryption</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="step-actions">
+                  <button class="btn btn-prev-btn" @click="prevStep">‹ &nbsp;Previous</button>
+                  <span style="font-size:12px;color:var(--muted);margin-left:12px">Policy issued immediately after payment</span>
+                </div>
+              </div>
+
+            </keep-alive>
+          </transition>
+        </div>
+      </div>
+
+      <!-- SUCCESS -->
+      <transition name="fade-up">
+        <div class="main-panel" v-if="done">
+          <div class="success-panel">
+            <div class="success-top">
+              <div class="ok-circle">✓</div>
+              <div>
+                <div class="ok-title">Policy Issued Successfully!</div>
+                <div class="ok-body">Your Motor Third Party Insurance policy is now active and has been registered.</div>
+                <div class="ok-body">A confirmation has been sent to<span v-if="owner.email"> {{owner.email}} and</span> +960 {{owner.mobile}}.</div>
+                <div style="margin-top:20px">
+                  <button class="btn btn-solid" @click="reset">Issue Another Policy</button>
+                </div>
+              </div>
+            </div>
+            <div class="cert-card">
+              <div class="cert-head">
+                <div class="cert-head-tag">Policy Certificate</div>
+                <div class="cert-head-num">{{policyNumber}}</div>
+              </div>
+              <div class="cert-rows">
+                <div class="cert-row"><div class="ck">Insurance Type</div><div class="cv">Motor Third Party</div></div>
+                <div class="cert-row"><div class="ck">Vehicle</div><div class="cv">{{vehicle.vehicleType}} / {{vehicle.vehicleNumber}}</div></div>
+                <div class="cert-row full"><div class="ck">Owner</div><div class="cv">{{owner.ownerName}}</div></div>
+                <div class="cert-row"><div class="ck">Period From</div><div class="cv">{{fmtDate(policy.periodFrom)}}</div></div>
+                <div class="cert-row"><div class="ck">Period To</div><div class="cv">{{fmtDate(policy.periodTo)}}</div></div>
+                <div class="cert-row full"><div class="ck">Premium Paid</div><div class="cv cv-hl">MVR {{Number(policy.premium).toFixed(2)}}</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </transition>
+
+    </div><!-- /main-body -->
+  </main>
+
+</div>
+</div><!-- /#app -->
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+<script>
+const { createApp, ref, computed } = Vue;
+
+const VEHICLE_TYPES = ['Motorcycle','Car','Van','Pickup','Truck','Bus','Tricycle','Three-Wheeler','Lorry','Heavy Vehicle','Boat','Jet Ski'];
+const ID_TYPES = [
+  { value:'NIC',         label:'National Identity Card' },
+  { value:'PASSPORT',    label:'Passport' },
+  { value:'WORK_PERMIT', label:'Work Permit' },
+];
+const ATOLLS = [
+  { id:'Kaafu',       label:'Kaafu (K)',         islands:["Male'","Hulhumale'","Vilimale'","Thulusdhoo","Dhiffushi","Guraidhoo","Maafushi","Gulhi","Himmafushi","Kaashidhoo"] },
+  { id:'Alif Alif',   label:'Alif Alif (AA)',    islands:['Rasdhoo','Thoddoo','Ukulhas','Mathiveri','Himandhoo','Feridhoo','Maalhos'] },
+  { id:'Alif Dhaal',  label:'Alif Dhaal (ADh)',  islands:['Mahibadhoo','Dhidhdhoo','Mandhoo','Dhangethi','Kunburudhoo','Maamigili','Omadhoo'] },
+  { id:'Baa',         label:'Baa (B)',            islands:['Eydhafushi','Thulhaadhoo','Kendhoo','Dharavandhoo','Hithaadhoo','Kamadhoo','Goidhoo'] },
+  { id:'Dhaalu',      label:'Dhaalu (Dh)',        islands:['Kudahuvadhoo','Bandidhoo','Hulhudheli','Maaenboodhoo','Rinbudhoo','Vaadhoo'] },
+  { id:'Faafu',       label:'Faafu (F)',          islands:['Magoodhoo','Nilandhoo','Biledhdhoo','Feeali','Dharanboodhoo'] },
+  { id:'Gaafu Alif',  label:'Gaafu Alif (GA)',   islands:['Vilingili','Kolamaafushi','Dhaandhoo','Kondey','Maamendhoo'] },
+  { id:'Gaafu Dhaal', label:'Gaafu Dhaal (GDh)', islands:['Thinadhoo','Faresmaathodaa','Gadhdhoo','Hoadedhdhoo','Madaveli'] },
+  { id:'Gnaviyani',   label:'Gnaviyani (Gn)',     islands:['Fuvahmulah'] },
+  { id:'Haa Alif',    label:'Haa Alif (HA)',      islands:['Dhidhdhoo','Kelaa','Utheemu','Filladhoo','Hoarafushi','Ihavandhoo','Maarandhoo'] },
+  { id:'Haa Dhaal',   label:'Haa Dhaal (HDh)',    islands:['Kulhudhuffushi','Nolhivaranfaru','Vaikaradhoo','Neykurendhoo','Hanimaadhoo'] },
+  { id:'Laamu',       label:'Laamu (L)',           islands:['Fonadhoo','Hithadhoo','Gan','Isdhoo','Maamendhoo','Mundoo'] },
+  { id:'Lhaviyani',   label:'Lhaviyani (Lh)',     islands:['Naifaru','Hinnavaru','Kurendhoo','Olhuvelifushi'] },
+  { id:'Meemu',       label:'Meemu (M)',           islands:['Muli','Kolhufaafoo','Raiymandhoo','Dhiggaru','Naalaafushi'] },
+  { id:'Noonu',       label:'Noonu (N)',           islands:['Manadhoo','Fodhdhoo','Kendhikulhudhoo','Holhudhdhoo','Miladhoo','Kudafari'] },
+  { id:'Raa',         label:'Raa (R)',             islands:['Ugoofaaru','Rasgetheemu','Innamaadhoo','Hulhudhuffaaru','Dhuvaafaru','Meedhoo'] },
+  { id:'Seenu',       label:'Seenu (S)',           islands:['Hithadhoo','Feydhoo','Maradhoo','Hulhumeedhoo','Gan','Fonadhoo'] },
+  { id:'Shaviyani',   label:'Shaviyani (Sh)',      islands:['Funadhoo','Goidhoo','Noomaraa','Milandhoo','Kanditheemu','Komandoo'] },
+  { id:'Thaa',        label:'Thaa (Th)',           islands:['Veymandoo','Gaadhiffushi','Thimarafushi','Hirilandhoo','Omadhoo','Guraidhoo'] },
+  { id:'Vaavu',       label:'Vaavu (V)',           islands:['Felidhoo','Keyodhoo','Thinadhoo','Fulidhoo','Rakeedhoo'] },
+];
+const STEP_META = [
+  { label:'Vehicle Info',    desc:'Type & registration' },
+  { label:'Owner Info',      desc:'Personal & contact'  },
+  { label:'Policy Details',  desc:'Premium & period'    },
+  { label:'Payment',         desc:'Review & pay'        },
+];
+
+function todayStr() { return new Date().toISOString().split('T')[0]; }
+function addYearMinus1(d) {
+  if (!d) return '';
+  const dt = new Date(d);
+  dt.setFullYear(dt.getFullYear() + 1);
+  dt.setDate(dt.getDate() - 1);
+  return dt.toISOString().split('T')[0];
+}
+function fmtDate(d) {
+  if (!d) return '—';
+  const [y,m,day] = d.split('-');
+  return `${day} ${['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+m-1]} ${y}`;
+}
+function genPolicy() {
+  const n = new Date();
+  return `SOL${String(n.getFullYear()).slice(-2)}${String(n.getMonth()+1).padStart(2,'0')}${String(n.getDate()).padStart(2,'0')}${Math.floor(Math.random()*9000+1000)}`;
+}
+
+createApp({
+  setup() {
+    const step           = ref(0);
+    const transitionName = ref('slide-forward');
+    const done           = ref(false);
+    const policyNumber   = ref(genPolicy());
+    const errors         = ref({});
+
+    const vehicle = ref({ vehicleType:'', vehicleNumber:'' });
+    const owner   = ref({ ownerName:'', idType:'', idNumber:'', address:'', atoll:'', island:'', mobile:'', email:'' });
+    const policy  = ref({ premium:'', issuingDate:todayStr(), proposalNumber:'', periodFrom:'', periodTo:'' });
+
+    const idLabel = computed(() =>
+      owner.value.idType === 'NIC'      ? 'NIC Number'      :
+      owner.value.idType === 'PASSPORT' ? 'Passport Number' : 'ID Number'
+    );
+    const selectedIslands = computed(() => {
+      const a = ATOLLS.find(a => a.id === owner.value.atoll);
+      return a ? a.islands : [];
+    });
+
+    function stepState(i) {
+      return i < step.value ? 'done' : i === step.value ? 'active' : 'inactive';
+    }
+    function validate() {
+      const e = {};
+      if (step.value === 0) {
+        if (!vehicle.value.vehicleType)          e.vehicleType   = 'Please select a vehicle type.';
+        if (!vehicle.value.vehicleNumber.trim()) e.vehicleNumber = 'Registration number is required.';
+      }
+      if (step.value === 1) {
+        if (!owner.value.ownerName.trim()) e.ownerName = 'Owner name is required.';
+        if (!owner.value.idType)           e.idType    = 'Select an identification type.';
+        if (!owner.value.idNumber.trim())  e.idNumber  = 'ID number is required.';
+        if (!owner.value.address.trim())   e.address   = 'Address is required.';
+        if (!owner.value.atoll)            e.atoll     = 'Select an atoll.';
+        if (!owner.value.island)           e.island    = 'Select an island.';
+        if (!owner.value.mobile.trim())    e.mobile    = 'Mobile number is required.';
+        else if (!/^\d{7}$/.test(owner.value.mobile)) e.mobile = 'Enter a valid 7-digit number.';
+        if (owner.value.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(owner.value.email)) e.email = 'Enter a valid email.';
+      }
+      if (step.value === 2) {
+        if (!policy.value.premium || isNaN(+policy.value.premium) || +policy.value.premium <= 0) e.premium = 'Enter a valid premium amount.';
+        if (!policy.value.issuingDate)           e.issuingDate    = 'Issuing date is required.';
+        if (!policy.value.proposalNumber.trim()) e.proposalNumber = 'Proposal number is required.';
+        if (!policy.value.periodFrom)            e.periodFrom     = 'Period start date is required.';
+      }
+      return e;
+    }
+    function nextStep() {
+      const e = validate();
+      if (Object.keys(e).length) { errors.value = e; return; }
+      errors.value = {};
+      transitionName.value = 'slide-forward';
+      step.value++;
+    }
+    function prevStep() {
+      errors.value = {};
+      transitionName.value = 'slide-back';
+      step.value--;
+    }
+    function finish() { done.value = true; }
+    function reset() {
+      step.value = 0; done.value = false; errors.value = {};
+      policyNumber.value = genPolicy();
+      vehicle.value = { vehicleType:'', vehicleNumber:'' };
+      owner.value   = { ownerName:'', idType:'', idNumber:'', address:'', atoll:'', island:'', mobile:'', email:'' };
+      policy.value  = { premium:'', issuingDate:todayStr(), proposalNumber:'', periodFrom:'', periodTo:'' };
+    }
+    function updatePeriodTo() {
+      policy.value.periodTo = addYearMinus1(policy.value.periodFrom);
+    }
+
+    return {
+      step, transitionName, done, policyNumber, errors,
+      vehicle, owner, policy,
+      vehicleTypes: VEHICLE_TYPES, idTypes: ID_TYPES, atolls: ATOLLS, stepMeta: STEP_META,
+      idLabel, selectedIslands, todayStr: todayStr(),
+      stepState, nextStep, prevStep, finish, reset, updatePeriodTo, fmtDate,
+    };
+  }
+}).mount('#app');
+</script>
+</body>
+</html>
