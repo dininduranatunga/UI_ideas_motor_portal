@@ -1,4 +1,10 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solarelle Insurance – Motor Third-Party Policy Portal</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
   :root{
@@ -15,170 +21,490 @@
     --radius:12px;
     --shadow:0 2px 16px rgba(96,107,179,0.10);
   }
-  body{font-family:var(--font-sans,system-ui);background:#f3f4fa;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:0}
 
-  .app-shell{width:100%;min-height:600px;overflow:hidden;position:relative;display:flex;flex-direction:column}
+  html, body {
+    font-family: system-ui, -apple-system, sans-serif;
+    background: #f3f4fa;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+  }
 
-  /* HEADER */
-  .header{background:#fff;border-bottom:1px solid var(--sol-border);padding:14px 32px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-  .logo{display:flex;align-items:center;gap:10px}
-  .logo-mark{width:36px;height:36px;background:var(--sol-primary);border-radius:8px;display:flex;align-items:center;justify-content:center}
-  .logo-mark i{color:#fff;font-size:18px}
-  .logo-text{font-size:17px;font-weight:500;color:var(--sol-text);letter-spacing:-0.3px}
-  .logo-sub{font-size:11px;color:var(--sol-muted);letter-spacing:0.5px;text-transform:uppercase}
-  .header-badge{font-size:11px;color:var(--sol-primary);background:var(--sol-light);border:1px solid var(--sol-border);border-radius:20px;padding:4px 12px;font-weight:500}
+  .app-shell {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
 
-  /* PROGRESS */
-  .progress-bar-wrap{background:#fff;border-bottom:1px solid var(--sol-border);padding:0 32px;flex-shrink:0}
-  .steps-row{display:flex;align-items:stretch;max-width:860px;margin:0 auto}
-  .step-item{flex:1;display:flex;flex-direction:column;align-items:center;padding:16px 8px 12px;position:relative;cursor:default}
-  .step-item:not(:last-child)::after{content:'';position:absolute;top:28px;left:calc(50% + 18px);right:calc(-50% + 18px);height:2px;background:var(--sol-border);z-index:0;transition:background 0.4s}
-  .step-item.done:not(:last-child)::after{background:var(--sol-primary)}
-  .step-circle{width:32px;height:32px;border-radius:50%;border:2px solid var(--sol-border);background:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;color:var(--sol-muted);z-index:1;transition:all 0.3s;position:relative}
-  .step-item.active .step-circle{border-color:var(--sol-primary);background:var(--sol-primary);color:#fff;box-shadow:0 0 0 4px rgba(96,107,179,0.15)}
-  .step-item.done .step-circle{border-color:var(--sol-primary);background:var(--sol-primary);color:#fff}
-  .step-label{font-size:11px;color:var(--sol-muted);margin-top:6px;text-align:center;line-height:1.3;font-weight:400}
-  .step-item.active .step-label{color:var(--sol-primary);font-weight:500}
-  .step-item.done .step-label{color:var(--sol-primary)}
+  /* ── HEADER ── */
+  .header {
+    background: #fff;
+    border-bottom: 1px solid var(--sol-border);
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .logo { display: flex; align-items: center; gap: 10px; }
+  .logo-mark {
+    width: 34px; height: 34px;
+    background: var(--sol-primary);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .logo-mark i { color: #fff; font-size: 17px; }
+  .logo-text { font-size: 15px; font-weight: 600; color: var(--sol-text); letter-spacing: -0.3px; line-height: 1.2; }
+  .logo-sub { font-size: 10px; color: var(--sol-muted); letter-spacing: 0.4px; text-transform: uppercase; }
+  .header-badge {
+    font-size: 11px; color: var(--sol-primary);
+    background: var(--sol-light);
+    border: 1px solid var(--sol-border);
+    border-radius: 20px; padding: 4px 10px; font-weight: 500;
+    white-space: nowrap; flex-shrink: 0;
+  }
 
-  /* SLIDER VIEWPORT */
-  .slider-viewport{flex:1;overflow:hidden;position:relative}
-  .slider-track{display:flex;width:400%;transition:transform 0.55s cubic-bezier(0.77,0,0.18,1)}
-  .slide{width:25%;flex-shrink:0;overflow-y:auto;max-height:520px;padding:28px 32px 32px;display:flex;flex-direction:column;align-items:center}
-  .slide-inner{width:100%;max-width:600px}
+  /* ── PROGRESS STEPPER ── */
+  .progress-bar-wrap {
+    background: #fff;
+    border-bottom: 1px solid var(--sol-border);
+    padding: 0 12px;
+    flex-shrink: 0;
+  }
+  .steps-row {
+    display: flex;
+    align-items: stretch;
+    max-width: 680px;
+    margin: 0 auto;
+  }
+  .step-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px 4px 10px;
+    position: relative;
+    cursor: default;
+  }
+  .step-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 24px;
+    left: calc(50% + 16px);
+    right: calc(-50% + 16px);
+    height: 2px;
+    background: var(--sol-border);
+    z-index: 0;
+    transition: background 0.4s;
+  }
+  .step-item.done:not(:last-child)::after { background: var(--sol-primary); }
+  .step-circle {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    border: 2px solid var(--sol-border);
+    background: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 600; color: var(--sol-muted);
+    z-index: 1; transition: all 0.3s; position: relative;
+  }
+  .step-item.active .step-circle {
+    border-color: var(--sol-primary);
+    background: var(--sol-primary);
+    color: #fff;
+    box-shadow: 0 0 0 4px rgba(96,107,179,0.15);
+  }
+  .step-item.done .step-circle { border-color: var(--sol-primary); background: var(--sol-primary); color: #fff; }
+  .step-label {
+    font-size: 10px; color: var(--sol-muted);
+    margin-top: 5px; text-align: center;
+    line-height: 1.3; font-weight: 400;
+  }
+  .step-item.active .step-label { color: var(--sol-primary); font-weight: 600; }
+  .step-item.done .step-label { color: var(--sol-primary); }
 
-  /* CARDS */
-  .card{background:#fff;border-radius:var(--radius);border:1px solid var(--sol-border);padding:24px;margin-bottom:16px}
-  .card-title{font-size:13px;font-weight:500;color:var(--sol-primary);text-transform:uppercase;letter-spacing:0.7px;margin-bottom:16px;display:flex;align-items:center;gap:8px}
-  .card-title i{font-size:16px}
+  /* Hide step labels on very small screens */
+  @media (max-width: 360px) {
+    .step-label { display: none; }
+    .step-item { padding: 10px 2px 8px; }
+  }
 
-  /* FORM */
-  .form-row{display:grid;gap:14px;margin-bottom:14px}
-  .form-row.cols-2{grid-template-columns:1fr 1fr}
-  .form-row.cols-3{grid-template-columns:1fr 1fr 1fr}
-  .field{display:flex;flex-direction:column;gap:5px}
-  .field label{font-size:12px;color:var(--sol-muted);font-weight:500;letter-spacing:0.2px}
-  .field label span.req{color:var(--sol-error)}
-  .field input,.field select{height:40px;border:1px solid var(--sol-border);border-radius:8px;padding:0 12px;font-size:14px;color:var(--sol-text);background:#fff;outline:none;transition:border 0.2s,box-shadow 0.2s;width:100%}
-  .field input:focus,.field select:focus{border-color:var(--sol-primary);box-shadow:0 0 0 3px rgba(96,107,179,0.12)}
-  .field .err-msg{font-size:11px;color:var(--sol-error);display:none;margin-top:2px}
-  .field.invalid input,.field.invalid select{border-color:var(--sol-error);box-shadow:0 0 0 3px rgba(226,75,74,0.10)}
-  .field.invalid .err-msg{display:block}
+  /* ── SLIDER ── */
+  .slider-viewport { flex: 1; overflow: hidden; position: relative; }
+  .slider-track {
+    display: flex;
+    width: 400%;
+    transition: transform 0.55s cubic-bezier(0.77,0,0.18,1);
+  }
+  .slide {
+    width: 25%;
+    flex-shrink: 0;
+    overflow-y: auto;
+    /* Dynamic height: full viewport minus header (~58px) + stepper (~60px) + nav (~60px) */
+    max-height: calc(100vh - 178px);
+    padding: 20px 16px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .slide-inner { width: 100%; max-width: 600px; }
 
-  @keyframes shake{0%,100%{transform:translateX(0)}15%{transform:translateX(-7px)}30%{transform:translateX(7px)}45%{transform:translateX(-5px)}60%{transform:translateX(5px)}75%{transform:translateX(-3px)}90%{transform:translateX(3px)}}
-  .shake{animation:shake 0.45s ease}
+  /* ── CARDS ── */
+  .card {
+    background: #fff;
+    border-radius: var(--radius);
+    border: 1px solid var(--sol-border);
+    padding: 18px 16px;
+    margin-bottom: 14px;
+  }
+  .card-title {
+    font-size: 11px; font-weight: 600;
+    color: var(--sol-primary);
+    text-transform: uppercase; letter-spacing: 0.7px;
+    margin-bottom: 14px;
+    display: flex; align-items: center; gap: 7px;
+  }
+  .card-title i { font-size: 15px; }
 
-  /* VEHICLE TYPE GRID */
-  .vtype-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:6px}
-  .vtype-card{border:2px solid var(--sol-border);border-radius:10px;padding:14px 8px 10px;text-align:center;cursor:pointer;transition:all 0.2s;background:#fff;user-select:none}
-  .vtype-card:hover{border-color:var(--sol-primary);background:var(--sol-lighter)}
-  .vtype-card.selected{border-color:var(--sol-primary);background:var(--sol-light)}
-  .vtype-card i{font-size:26px;color:var(--sol-muted);display:block;margin-bottom:6px}
-  .vtype-card.selected i{color:var(--sol-primary)}
-  .vtype-card span{font-size:11px;color:var(--sol-muted);font-weight:500}
-  .vtype-card.selected span{color:var(--sol-primary)}
-  .vtype-error{font-size:11px;color:var(--sol-error);display:none;margin-top:-4px;margin-bottom:8px}
+  /* ── FORM ── */
+  .form-row { display: grid; gap: 12px; margin-bottom: 12px; }
+  .form-row.cols-2 { grid-template-columns: 1fr 1fr; }
+  .form-row.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
 
-  /* PLATE INPUT SPECIAL */
-  .plate-wrap{position:relative}
-  .plate-wrap input{font-family:monospace;letter-spacing:2px;text-transform:uppercase;font-size:16px;padding-left:48px;font-weight:500}
-  .plate-flag{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:12px;color:var(--sol-muted);font-weight:500;border-right:1px solid var(--sol-border);padding-right:8px;line-height:1}
+  /* Collapse multi-col on small screens */
+  @media (max-width: 480px) {
+    .form-row.cols-2 { grid-template-columns: 1fr; }
+    .form-row.cols-3 { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 340px) {
+    .form-row.cols-3 { grid-template-columns: 1fr; }
+  }
 
-  /* STEP 3 — POLICY */
-  .pol-ref-box{background:linear-gradient(135deg,var(--sol-light) 0%,#edf0fc 100%);border:2px dashed var(--sol-border);border-radius:10px;padding:20px;text-align:center;margin-bottom:16px}
-  .pol-ref-label{font-size:11px;color:var(--sol-muted);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:6px}
-  .pol-ref-number{font-size:22px;font-weight:500;color:var(--sol-primary);letter-spacing:2px;font-family:monospace}
-  .coverage-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
-  .cov-item{background:var(--sol-lighter);border:1px solid var(--sol-border);border-radius:8px;padding:12px 14px}
-  .cov-item-label{font-size:11px;color:var(--sol-muted);margin-bottom:3px}
-  .cov-item-val{font-size:14px;color:var(--sol-text);font-weight:500}
-  .premium-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--sol-border)}
-  .premium-row:last-child{border:none}
-  .premium-row .lbl{font-size:13px;color:var(--sol-muted)}
-  .premium-row .val{font-size:14px;color:var(--sol-text);font-weight:500}
-  .premium-total{background:var(--sol-primary);border-radius:8px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;margin-top:14px}
-  .premium-total .lbl{font-size:14px;color:rgba(255,255,255,0.8)}
-  .premium-total .val{font-size:20px;color:#fff;font-weight:500}
+  .field { display: flex; flex-direction: column; gap: 4px; }
+  .field label { font-size: 11px; color: var(--sol-muted); font-weight: 600; letter-spacing: 0.2px; }
+  .field label span.req { color: var(--sol-error); }
+  .field input, .field select {
+    height: 40px;
+    border: 1px solid var(--sol-border);
+    border-radius: 8px;
+    padding: 0 12px;
+    font-size: 14px;
+    color: var(--sol-text);
+    background: #fff;
+    outline: none;
+    transition: border 0.2s, box-shadow 0.2s;
+    width: 100%;
+    /* Prevent iOS zoom on focus */
+    font-size: max(16px, 14px);
+  }
+  @media (min-width: 481px) {
+    .field input, .field select { font-size: 14px; }
+  }
+  .field input:focus, .field select:focus {
+    border-color: var(--sol-primary);
+    box-shadow: 0 0 0 3px rgba(96,107,179,0.12);
+  }
+  .field .err-msg { font-size: 11px; color: var(--sol-error); display: none; margin-top: 2px; }
+  .field.invalid input, .field.invalid select {
+    border-color: var(--sol-error);
+    box-shadow: 0 0 0 3px rgba(226,75,74,0.10);
+  }
+  .field.invalid .err-msg { display: block; }
 
-  /* PERIOD PICKER */
-  .period-tabs{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
-  .period-tab{flex:1;min-width:80px;border:1.5px solid var(--sol-border);border-radius:8px;padding:10px 6px;text-align:center;cursor:pointer;transition:all 0.2s;background:#fff}
-  .period-tab:hover{border-color:var(--sol-primary)}
-  .period-tab.sel{border-color:var(--sol-primary);background:var(--sol-light)}
-  .period-tab .pd{font-size:13px;font-weight:500;color:var(--sol-text)}
-  .period-tab.sel .pd{color:var(--sol-primary)}
-  .period-tab .pr{font-size:11px;color:var(--sol-muted)}
-  .period-tab.sel .pr{color:var(--sol-primary)}
+  @keyframes shake {
+    0%,100%{transform:translateX(0)}15%{transform:translateX(-7px)}30%{transform:translateX(7px)}
+    45%{transform:translateX(-5px)}60%{transform:translateX(5px)}75%{transform:translateX(-3px)}90%{transform:translateX(3px)}
+  }
+  .shake { animation: shake 0.45s ease; }
 
-  /* STEP 4 SUMMARY */
-  .summary-section{margin-bottom:16px}
-  .summary-section-title{font-size:11px;font-weight:500;letter-spacing:0.7px;color:var(--sol-muted);text-transform:uppercase;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--sol-border)}
-  .summary-row{display:flex;justify-content:space-between;align-items:flex-start;padding:7px 0;font-size:13px}
-  .summary-row .sk{color:var(--sol-muted)}
-  .summary-row .sv{color:var(--sol-text);font-weight:500;text-align:right;max-width:60%}
-  .pay-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
-  .pay-btn{border:1.5px solid var(--sol-border);border-radius:10px;padding:14px 10px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;transition:all 0.2s;background:#fff;text-decoration:none}
-  .pay-btn:hover{border-color:var(--sol-primary);background:var(--sol-lighter);transform:translateY(-2px)}
-  .pay-btn i{font-size:22px;color:var(--sol-primary)}
-  .pay-btn span{font-size:12px;color:var(--sol-text);font-weight:500}
-  .pay-btn small{font-size:10px;color:var(--sol-muted)}
-  .pay-total-chip{background:var(--sol-primary);color:#fff;border-radius:8px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
-  .pay-total-chip .ptl{font-size:13px;opacity:0.85}
-  .pay-total-chip .ptv{font-size:18px;font-weight:500}
+  /* ── VEHICLE TYPE GRID ── */
+  .vtype-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+  @media (max-width: 420px) {
+    .vtype-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  .vtype-card {
+    border: 2px solid var(--sol-border);
+    border-radius: 10px;
+    padding: 12px 6px 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: #fff;
+    user-select: none;
+  }
+  .vtype-card:hover { border-color: var(--sol-primary); background: var(--sol-lighter); }
+  .vtype-card.selected { border-color: var(--sol-primary); background: var(--sol-light); }
+  .vtype-card i { font-size: 24px; color: var(--sol-muted); display: block; margin-bottom: 5px; }
+  .vtype-card.selected i { color: var(--sol-primary); }
+  .vtype-card span { font-size: 10px; color: var(--sol-muted); font-weight: 600; }
+  .vtype-card.selected span { color: var(--sol-primary); }
+  .vtype-error { font-size: 11px; color: var(--sol-error); display: none; margin-top: -2px; margin-bottom: 8px; }
 
-  @keyframes checkPop{0%{transform:scale(0) rotate(-20deg);opacity:0}70%{transform:scale(1.2) rotate(4deg)}100%{transform:scale(1) rotate(0);opacity:1}}
-  .success-icon{animation:checkPop 0.5s ease forwards}
+  /* ── PLATE INPUT ── */
+  .plate-wrap { position: relative; }
+  .plate-wrap input {
+    font-family: monospace;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-size: 15px !important;
+    padding-left: 52px;
+    font-weight: 600;
+  }
+  .plate-flag {
+    position: absolute;
+    left: 12px; top: 50%;
+    transform: translateY(-50%);
+    font-size: 11px; color: var(--sol-muted);
+    font-weight: 600;
+    border-right: 1px solid var(--sol-border);
+    padding-right: 8px; line-height: 1;
+    white-space: nowrap;
+  }
 
-  /* NAV BUTTONS */
-  .nav-bar{background:#fff;border-top:1px solid var(--sol-border);padding:14px 32px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
-  .btn-back{background:none;border:1.5px solid var(--sol-border);border-radius:8px;padding:10px 22px;font-size:14px;color:var(--sol-muted);cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:6px}
-  .btn-back:hover{border-color:var(--sol-primary);color:var(--sol-primary)}
-  .btn-next{background:var(--sol-primary);border:none;border-radius:8px;padding:10px 28px;font-size:14px;color:#fff;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:8px;font-weight:500}
-  .btn-next:hover{background:var(--sol-dark)}
-  .btn-next:active{transform:scale(0.97)}
-  .btn-next i,.btn-back i{font-size:16px}
-  .step-indicator{font-size:12px;color:var(--sol-muted)}
-  .step-indicator strong{color:var(--sol-primary)}
+  /* ── STEP 3 POLICY ── */
+  .pol-ref-box {
+    background: linear-gradient(135deg, var(--sol-light) 0%, #edf0fc 100%);
+    border: 2px dashed var(--sol-border);
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+    margin-bottom: 14px;
+  }
+  .pol-ref-label { font-size: 10px; color: var(--sol-muted); letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 5px; }
+  .pol-ref-number { font-size: 19px; font-weight: 600; color: var(--sol-primary); letter-spacing: 2px; font-family: monospace; word-break: break-all; }
 
-  /* CONFIRM badge */
-  .confirmed-badge{display:inline-flex;align-items:center;gap:6px;background:var(--sol-success-bg);color:var(--sol-success);border-radius:20px;padding:5px 12px;font-size:12px;font-weight:500;margin-bottom:12px}
-  .plate-display{font-family:monospace;font-size:16px;letter-spacing:2px;background:var(--sol-light);border-radius:6px;padding:3px 10px;color:var(--sol-primary);font-weight:500}
+  .coverage-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  @media (max-width: 360px) {
+    .coverage-grid { grid-template-columns: 1fr; }
+  }
+  .cov-item { background: var(--sol-lighter); border: 1px solid var(--sol-border); border-radius: 8px; padding: 10px 12px; }
+  .cov-item-label { font-size: 10px; color: var(--sol-muted); margin-bottom: 3px; }
+  .cov-item-val { font-size: 13px; color: var(--sol-text); font-weight: 600; }
+
+  .premium-row { display: flex; align-items: center; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid var(--sol-border); }
+  .premium-row:last-child { border: none; }
+  .premium-row .lbl { font-size: 13px; color: var(--sol-muted); }
+  .premium-row .val { font-size: 13px; color: var(--sol-text); font-weight: 600; }
+  .premium-total {
+    background: var(--sol-primary);
+    border-radius: 8px; padding: 12px 14px;
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 12px;
+  }
+  .premium-total .lbl { font-size: 13px; color: rgba(255,255,255,0.85); }
+  .premium-total .val { font-size: 18px; color: #fff; font-weight: 700; }
+
+  /* ── PERIOD PICKER ── */
+  .period-tabs { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+  .period-tab {
+    flex: 1; min-width: 70px;
+    border: 1.5px solid var(--sol-border);
+    border-radius: 8px; padding: 9px 6px;
+    text-align: center; cursor: pointer;
+    transition: all 0.2s; background: #fff;
+  }
+  .period-tab:hover { border-color: var(--sol-primary); }
+  .period-tab.sel { border-color: var(--sol-primary); background: var(--sol-light); }
+  .period-tab .pd { font-size: 13px; font-weight: 600; color: var(--sol-text); }
+  .period-tab.sel .pd { color: var(--sol-primary); }
+  .period-tab .pr { font-size: 10px; color: var(--sol-muted); }
+  .period-tab.sel .pr { color: var(--sol-primary); }
+
+  /* ── STEP 4 SUMMARY ── */
+  .summary-section { margin-bottom: 14px; }
+  .summary-section-title {
+    font-size: 10px; font-weight: 600;
+    letter-spacing: 0.7px; color: var(--sol-muted);
+    text-transform: uppercase;
+    margin-bottom: 8px; padding-bottom: 6px;
+    border-bottom: 1px solid var(--sol-border);
+  }
+  .summary-row {
+    display: flex; justify-content: space-between;
+    align-items: flex-start; padding: 6px 0; font-size: 13px;
+  }
+  .summary-row .sk { color: var(--sol-muted); flex-shrink: 0; margin-right: 12px; }
+  .summary-row .sv { color: var(--sol-text); font-weight: 600; text-align: right; word-break: break-word; }
+
+  .pay-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 14px;
+  }
+  @media (max-width: 340px) {
+    .pay-grid { grid-template-columns: 1fr; }
+  }
+  .pay-btn {
+    border: 1.5px solid var(--sol-border);
+    border-radius: 10px; padding: 12px 8px;
+    display: flex; flex-direction: column;
+    align-items: center; gap: 5px;
+    cursor: pointer; transition: all 0.2s;
+    background: #fff; text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .pay-btn:hover { border-color: var(--sol-primary); background: var(--sol-lighter); transform: translateY(-2px); }
+  .pay-btn:active { transform: scale(0.97); }
+  .pay-btn i { font-size: 20px; color: var(--sol-primary); }
+  .pay-btn span { font-size: 11px; color: var(--sol-text); font-weight: 600; text-align: center; }
+  .pay-btn small { font-size: 10px; color: var(--sol-muted); text-align: center; }
+  .pay-total-chip {
+    background: var(--sol-primary); color: #fff;
+    border-radius: 8px; padding: 12px 14px;
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 12px;
+  }
+  .pay-total-chip .ptl { font-size: 12px; opacity: 0.85; }
+  .pay-total-chip .ptv { font-size: 18px; font-weight: 700; }
+
+  @keyframes checkPop {
+    0%{transform:scale(0) rotate(-20deg);opacity:0}
+    70%{transform:scale(1.2) rotate(4deg)}
+    100%{transform:scale(1) rotate(0);opacity:1}
+  }
+  .success-icon { animation: checkPop 0.5s ease forwards; }
+
+  /* ── NAV BAR ── */
+  .nav-bar {
+    background: #fff;
+    border-top: 1px solid var(--sol-border);
+    padding: 12px 16px;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-shrink: 0;
+    position: sticky; bottom: 0; z-index: 100;
+    gap: 8px;
+  }
+  .btn-back {
+    background: none;
+    border: 1.5px solid var(--sol-border);
+    border-radius: 8px; padding: 9px 16px;
+    font-size: 13px; color: var(--sol-muted);
+    cursor: pointer; transition: all 0.2s;
+    display: flex; align-items: center; gap: 5px;
+    white-space: nowrap;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn-back:hover { border-color: var(--sol-primary); color: var(--sol-primary); }
+  .btn-next {
+    background: var(--sol-primary);
+    border: none; border-radius: 8px;
+    padding: 9px 22px;
+    font-size: 13px; color: #fff;
+    cursor: pointer; transition: all 0.2s;
+    display: flex; align-items: center; gap: 7px;
+    font-weight: 600;
+    white-space: nowrap;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn-next:hover { background: var(--sol-dark); }
+  .btn-next:active { transform: scale(0.97); }
+  .btn-next i, .btn-back i { font-size: 15px; }
+  .step-indicator { font-size: 11px; color: var(--sol-muted); white-space: nowrap; }
+  .step-indicator strong { color: var(--sol-primary); }
+
+  /* ── PLATE DISPLAY ── */
+  .plate-display {
+    font-family: monospace; font-size: 14px;
+    letter-spacing: 2px;
+    background: var(--sol-light); border-radius: 6px;
+    padding: 2px 8px; color: var(--sol-primary); font-weight: 600;
+    word-break: break-all;
+  }
+
+  /* ── TOAST ── */
+  #pay-toast {
+    display: none;
+    position: fixed;
+    bottom: 80px; right: 16px;
+    background: var(--sol-primary);
+    color: #fff;
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 13px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    z-index: 999;
+    max-width: min(280px, calc(100vw - 32px));
+    animation: fadeInUp 0.3s ease;
+  }
+  @keyframes fadeInUp {
+    from{opacity:0;transform:translateY(10px)}
+    to{opacity:1;transform:translateY(0)}
+  }
+
+  /* ── UTILITY ── */
+  .confirmed-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--sol-success-bg); color: var(--sol-success);
+    border-radius: 20px; padding: 5px 12px;
+    font-size: 12px; font-weight: 600; margin-bottom: 10px;
+  }
+
+  /* Security note at bottom of payment card */
+  .security-note {
+    margin-top: 12px; padding: 10px 12px;
+    background: var(--sol-lighter);
+    border-radius: 8px;
+    font-size: 11px; color: var(--sol-muted);
+    display: flex; align-items: flex-start; gap: 8px;
+    line-height: 1.5;
+  }
+  .security-note i { font-size: 15px; color: var(--sol-primary); flex-shrink: 0; margin-top: 1px; }
 </style>
+</head>
+<body>
 
 <div class="app-shell">
 
+  <!-- HEADER -->
   <div class="header">
     <div class="logo">
       <div class="logo-mark"><i class="ti ti-shield-check" aria-hidden="true"></i></div>
       <div>
         <div class="logo-text">Solarelle Insurance</div>
-        <div class="logo-sub">Motor Third-Party Policy Portal</div>
+        <div class="logo-sub">Motor Third-Party Portal</div>
       </div>
     </div>
-    <div class="header-badge"><i class="ti ti-lock" style="font-size:11px;vertical-align:-1px" aria-hidden="true"></i> Secure Session</div>
+    <div class="header-badge"><i class="ti ti-lock" style="font-size:10px;vertical-align:-1px" aria-hidden="true"></i> Secure</div>
   </div>
 
+  <!-- PROGRESS STEPPER -->
   <div class="progress-bar-wrap">
     <div class="steps-row">
       <div class="step-item active" id="si-0">
-        <div class="step-circle"><span class="snum">1</span><i class="ti ti-check" style="display:none;font-size:14px"></i></div>
+        <div class="step-circle"><span class="snum">1</span><i class="ti ti-check" style="display:none;font-size:13px"></i></div>
         <div class="step-label">Vehicle Info</div>
       </div>
       <div class="step-item" id="si-1">
-        <div class="step-circle"><span class="snum">2</span><i class="ti ti-check" style="display:none;font-size:14px"></i></div>
+        <div class="step-circle"><span class="snum">2</span><i class="ti ti-check" style="display:none;font-size:13px"></i></div>
         <div class="step-label">Personal Details</div>
       </div>
       <div class="step-item" id="si-2">
-        <div class="step-circle"><span class="snum">3</span><i class="ti ti-check" style="display:none;font-size:14px"></i></div>
+        <div class="step-circle"><span class="snum">3</span><i class="ti ti-check" style="display:none;font-size:13px"></i></div>
         <div class="step-label">Policy & Premium</div>
       </div>
       <div class="step-item" id="si-3">
-        <div class="step-circle"><span class="snum">4</span><i class="ti ti-check" style="display:none;font-size:14px"></i></div>
+        <div class="step-circle"><span class="snum">4</span><i class="ti ti-check" style="display:none;font-size:13px"></i></div>
         <div class="step-label">Confirm & Pay</div>
       </div>
     </div>
   </div>
 
+  <!-- SLIDES -->
   <div class="slider-viewport">
     <div class="slider-track" id="track">
 
@@ -200,7 +526,7 @@
             <div class="card-title"><i class="ti ti-id-badge" aria-hidden="true"></i> Vehicle Registration</div>
             <div class="form-row cols-2">
               <div class="field" id="f-regno">
-                <label>Registration Number <span class="req">*</span></label>
+                <label>Registration No. <span class="req">*</span></label>
                 <div class="plate-wrap">
                   <span class="plate-flag">MV</span>
                   <input type="text" id="regno" placeholder="A1234" maxlength="8" autocomplete="off" oninput="this.value=this.value.toUpperCase()">
@@ -209,7 +535,7 @@
               </div>
               <div class="field" id="f-chassis">
                 <label>Chassis Number <span class="req">*</span></label>
-                <input type="text" id="chassis" placeholder="e.g. JN1AZ4EH7FM730221" maxlength="20" autocomplete="off" oninput="this.value=this.value.toUpperCase()">
+                <input type="text" id="chassis" placeholder="JN1AZ4EH7FM730221" maxlength="20" autocomplete="off" oninput="this.value=this.value.toUpperCase()">
                 <span class="err-msg">Enter a valid chassis number (min 10 chars).</span>
               </div>
             </div>
@@ -218,7 +544,9 @@
                 <label>Make <span class="req">*</span></label>
                 <select id="make">
                   <option value="">Select make</option>
-                  <option>Toyota</option><option>Honda</option><option>Suzuki</option><option>Mitsubishi</option><option>Nissan</option><option>Hyundai</option><option>Isuzu</option><option>Other</option>
+                  <option>Toyota</option><option>Honda</option><option>Suzuki</option>
+                  <option>Mitsubishi</option><option>Nissan</option><option>Hyundai</option>
+                  <option>Isuzu</option><option>Other</option>
                 </select>
                 <span class="err-msg">Please select the vehicle make.</span>
               </div>
@@ -229,9 +557,7 @@
               </div>
               <div class="field" id="f-year">
                 <label>Year <span class="req">*</span></label>
-                <select id="year">
-                  <option value="">Year</option>
-                </select>
+                <select id="year"><option value="">Year</option></select>
                 <span class="err-msg">Please select the year.</span>
               </div>
             </div>
@@ -313,7 +639,13 @@
                 <label>Atoll <span class="req">*</span></label>
                 <select id="atoll">
                   <option value="">Select atoll</option>
-                  <option>Malé City</option><option>Addu City</option><option>Alif Alif</option><option>Alif Dhaal</option><option>Baa</option><option>Dhaalu</option><option>Faafu</option><option>Gaafu Alif</option><option>Gaafu Dhaalu</option><option>Haa Alif</option><option>Haa Dhaalu</option><option>Kaafu</option><option>Laamu</option><option>Lhaviyani</option><option>Meemu</option><option>Noonu</option><option>Raa</option><option>Seenu</option><option>Shaviyani</option><option>Thaa</option><option>Vaavu</option>
+                  <option>Malé City</option><option>Addu City</option><option>Alif Alif</option>
+                  <option>Alif Dhaal</option><option>Baa</option><option>Dhaalu</option>
+                  <option>Faafu</option><option>Gaafu Alif</option><option>Gaafu Dhaalu</option>
+                  <option>Haa Alif</option><option>Haa Dhaalu</option><option>Kaafu</option>
+                  <option>Laamu</option><option>Lhaviyani</option><option>Meemu</option>
+                  <option>Noonu</option><option>Raa</option><option>Seenu</option>
+                  <option>Shaviyani</option><option>Thaa</option><option>Vaavu</option>
                 </select>
                 <span class="err-msg">Please select an atoll.</span>
               </div>
@@ -337,7 +669,7 @@
               <div class="field" id="f-phone">
                 <label>Mobile Number <span class="req">*</span></label>
                 <div class="plate-wrap">
-                  <span class="plate-flag" style="font-size:11px">(960)</span>
+                  <span class="plate-flag">(960)</span>
                   <input type="tel" id="phone" placeholder="7123456" maxlength="7">
                 </div>
                 <span class="err-msg">Enter a valid 7-digit Maldivian number.</span>
@@ -410,12 +742,12 @@
       <!-- SLIDE 4: Confirm & Pay -->
       <div class="slide" id="slide-3">
         <div class="slide-inner">
-          <div style="text-align:center;margin-bottom:18px">
-            <div class="success-icon" style="display:inline-flex;align-items:center;justify-content:center;width:52px;height:52px;border-radius:50%;background:var(--sol-light);margin-bottom:10px">
-              <i class="ti ti-circle-check" style="font-size:28px;color:var(--sol-primary)" aria-hidden="true"></i>
+          <div style="text-align:center;margin-bottom:16px">
+            <div class="success-icon" style="display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:50%;background:var(--sol-light);margin-bottom:8px">
+              <i class="ti ti-circle-check" style="font-size:26px;color:var(--sol-primary)" aria-hidden="true"></i>
             </div>
-            <div style="font-size:17px;font-weight:500;color:var(--sol-text);margin-bottom:4px">Review & Confirm Policy</div>
-            <div style="font-size:13px;color:var(--sol-muted)">Please verify all details before proceeding to payment.</div>
+            <div style="font-size:16px;font-weight:600;color:var(--sol-text);margin-bottom:3px">Review & Confirm Policy</div>
+            <div style="font-size:12px;color:var(--sol-muted)">Verify all details before proceeding to payment.</div>
           </div>
 
           <div class="card">
@@ -423,6 +755,7 @@
               <span class="ptl">Total Amount Due</span>
               <span class="ptv" id="confirm-total">MVR 538.50</span>
             </div>
+
             <div class="summary-section">
               <div class="summary-section-title">Vehicle Information</div>
               <div class="summary-row"><span class="sk">Type</span><span class="sv" id="s-vtype">—</span></div>
@@ -431,6 +764,7 @@
               <div class="summary-row"><span class="sk">Make / Model</span><span class="sv" id="s-makemodel">—</span></div>
               <div class="summary-row"><span class="sk">Year</span><span class="sv" id="s-year">—</span></div>
             </div>
+
             <div class="summary-section">
               <div class="summary-section-title">Policyholder</div>
               <div class="summary-row"><span class="sk">Name</span><span class="sv" id="s-name">—</span></div>
@@ -438,6 +772,7 @@
               <div class="summary-row"><span class="sk">Address</span><span class="sv" id="s-addr">—</span></div>
               <div class="summary-row"><span class="sk">Contact</span><span class="sv" id="s-contact">—</span></div>
             </div>
+
             <div class="summary-section">
               <div class="summary-section-title">Policy Details</div>
               <div class="summary-row"><span class="sk">Reference</span><span class="sv" id="s-polref">—</span></div>
@@ -451,31 +786,47 @@
           <div class="card">
             <div class="card-title"><i class="ti ti-credit-card" aria-hidden="true"></i> Select Payment Method</div>
             <div class="pay-grid">
-              <a class="pay-btn" href="#" onclick="handlePay('BML Internet Banking');return false"><i class="ti ti-building-bank" aria-hidden="true"></i><span>BML Internet Banking</span><small>Bank of Maldives</small></a>
-              <a class="pay-btn" href="#" onclick="handlePay('BML mFaisaa');return false"><i class="ti ti-device-mobile" aria-hidden="true"></i><span>BML mFaisaa</span><small>Mobile wallet</small></a>
-              <a class="pay-btn" href="#" onclick="handlePay('MIB Online');return false"><i class="ti ti-world" aria-hidden="true"></i><span>MIB Online Pay</span><small>Maldives Islamic Bank</small></a>
-              <a class="pay-btn" href="#" onclick="handlePay('Card Payment');return false"><i class="ti ti-credit-card" aria-hidden="true"></i><span>Card Payment</span><small>Visa / MasterCard</small></a>
+              <a class="pay-btn" href="#" onclick="handlePay('BML Internet Banking');return false">
+                <i class="ti ti-building-bank" aria-hidden="true"></i>
+                <span>BML Internet Banking</span><small>Bank of Maldives</small>
+              </a>
+              <a class="pay-btn" href="#" onclick="handlePay('BML mFaisaa');return false">
+                <i class="ti ti-device-mobile" aria-hidden="true"></i>
+                <span>BML mFaisaa</span><small>Mobile wallet</small>
+              </a>
+              <a class="pay-btn" href="#" onclick="handlePay('MIB Online Pay');return false">
+                <i class="ti ti-world" aria-hidden="true"></i>
+                <span>MIB Online Pay</span><small>Maldives Islamic Bank</small>
+              </a>
+              <a class="pay-btn" href="#" onclick="handlePay('Card Payment');return false">
+                <i class="ti ti-credit-card" aria-hidden="true"></i>
+                <span>Card Payment</span><small>Visa / MasterCard</small>
+              </a>
             </div>
-            <div style="margin-top:12px;padding:10px 12px;background:var(--sol-lighter);border-radius:8px;font-size:11px;color:var(--sol-muted);display:flex;align-items:center;gap:8px">
-              <i class="ti ti-shield-lock" style="font-size:16px;color:var(--sol-primary)" aria-hidden="true"></i>
+            <div class="security-note">
+              <i class="ti ti-shield-lock" aria-hidden="true"></i>
               All transactions are secured and regulated by the Maldives Monetary Authority (MMA).
             </div>
           </div>
         </div>
       </div>
 
-    </div>
-  </div>
+    </div><!-- /slider-track -->
+  </div><!-- /slider-viewport -->
 
+  <!-- NAV BAR -->
   <div class="nav-bar">
-    <button class="btn-back" id="btn-back" onclick="goBack()" style="visibility:hidden"><i class="ti ti-arrow-left" aria-hidden="true"></i> Back</button>
+    <button class="btn-back" id="btn-back" onclick="goBack()" style="visibility:hidden">
+      <i class="ti ti-arrow-left" aria-hidden="true"></i> Back
+    </button>
     <span class="step-indicator">Step <strong id="step-num">1</strong> of 4</span>
-    <button class="btn-next" id="btn-next" onclick="goNext()">Next <i class="ti ti-arrow-right" aria-hidden="true"></i></button>
+    <button class="btn-next" id="btn-next" onclick="goNext()">
+      Next <i class="ti ti-arrow-right" aria-hidden="true"></i>
+    </button>
   </div>
 </div>
 
-<div id="pay-toast" style="display:none;position:fixed;bottom:20px;right:20px;background:var(--sol-primary);color:#fff;border-radius:10px;padding:14px 20px;font-size:13px;box-shadow:0 4px 20px rgba(0,0,0,0.15);z-index:999;max-width:280px;animation:fadeInUp 0.3s ease"></div>
-<style>@keyframes fadeInUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}</style>
+<div id="pay-toast"></div>
 
 <script>
 let currentStep = 0;
@@ -488,17 +839,17 @@ const LEVY_RATE = 0.03;
 const STAMP = 25;
 const ADMIN = 50;
 
-function calcPremiums(){
+function calcPremiums() {
   const base = +(BASE_PREMIUM * periodMul).toFixed(2);
   const levy = +(base * LEVY_RATE).toFixed(2);
   const total = +(base + levy + STAMP + ADMIN).toFixed(2);
-  return {base, levy, total};
+  return { base, levy, total };
 }
 
-function fmtMVR(n){ return 'MVR ' + n.toFixed(2); }
+function fmtMVR(n) { return 'MVR ' + n.toFixed(2); }
 
-function updatePremiumDisplay(){
-  const {base,levy,total} = calcPremiums();
+function updatePremiumDisplay() {
+  const { base, levy, total } = calcPremiums();
   document.getElementById('prem-base').textContent = fmtMVR(base);
   document.getElementById('prem-levy').textContent = fmtMVR(levy);
   document.getElementById('prem-stamp').textContent = fmtMVR(STAMP);
@@ -507,43 +858,47 @@ function updatePremiumDisplay(){
   document.getElementById('confirm-total').textContent = fmtMVR(total);
 }
 
-function genPolRef(){
-  const n = Math.floor(100000 + Math.random() * 900000);
-  return 'SRL-MTP-' + n;
-}
-
-const polRef = genPolRef();
+// Generate policy reference
+const polRef = 'SRL-MTP-' + Math.floor(100000 + Math.random() * 900000);
 document.getElementById('pol-ref').textContent = polRef;
 
+// Populate year dropdown
 const yr = document.getElementById('year');
-for(let y=2026;y>=1990;y--){const o=document.createElement('option');o.value=y;o.textContent=y;yr.appendChild(o);}
+for (let y = 2026; y >= 1990; y--) {
+  const o = document.createElement('option');
+  o.value = y; o.textContent = y;
+  yr.appendChild(o);
+}
 
+// Start date setup
 const today = new Date().toISOString().split('T')[0];
 document.getElementById('startdate').min = today;
 document.getElementById('startdate').value = today;
 document.getElementById('startdate').addEventListener('change', updateEndDate);
 
-function updateEndDate(){
+function updateEndDate() {
   const sd = document.getElementById('startdate').value;
-  if(!sd) return;
+  if (!sd) return;
   const d = new Date(sd);
   d.setMonth(d.getMonth() + selectedPeriod);
   document.getElementById('enddate').value = d.toISOString().split('T')[0];
 }
 updateEndDate();
 
-document.querySelectorAll('.vtype-card').forEach(c=>{
-  c.addEventListener('click',()=>{
-    document.querySelectorAll('.vtype-card').forEach(x=>x.classList.remove('selected'));
+// Vehicle type selection
+document.querySelectorAll('.vtype-card').forEach(c => {
+  c.addEventListener('click', () => {
+    document.querySelectorAll('.vtype-card').forEach(x => x.classList.remove('selected'));
     c.classList.add('selected');
     selectedVType = c.dataset.type;
-    document.getElementById('vtype-err').style.display='none';
+    document.getElementById('vtype-err').style.display = 'none';
   });
 });
 
-document.querySelectorAll('.period-tab').forEach(t=>{
-  t.addEventListener('click',()=>{
-    document.querySelectorAll('.period-tab').forEach(x=>x.classList.remove('sel'));
+// Period tabs
+document.querySelectorAll('.period-tab').forEach(t => {
+  t.addEventListener('click', () => {
+    document.querySelectorAll('.period-tab').forEach(x => x.classList.remove('sel'));
     t.classList.add('sel');
     selectedPeriod = +t.dataset.m;
     periodMul = +t.dataset.mul;
@@ -552,134 +907,162 @@ document.querySelectorAll('.period-tab').forEach(t=>{
   });
 });
 
-function shakeField(el){
+// Shake animation
+function shakeField(el) {
   el.classList.remove('shake');
   void el.offsetWidth;
   el.classList.add('shake');
-  el.addEventListener('animationend',()=>el.classList.remove('shake'),{once:true});
+  el.addEventListener('animationend', () => el.classList.remove('shake'), { once: true });
 }
 
-function invalidate(id, msg){
+function invalidate(id, msg) {
   const f = document.getElementById('f-' + id);
-  if(!f) return;
+  if (!f) return;
   f.classList.add('invalid');
-  if(msg) { const em = f.querySelector('.err-msg'); if(em) em.textContent = msg; }
+  if (msg) { const em = f.querySelector('.err-msg'); if (em) em.textContent = msg; }
   shakeField(f);
 }
 
-function clearInvalid(id){
-  const f = document.getElementById('f-' + id);
-  if(f) f.classList.remove('invalid');
-}
-
-['regno','chassis','make','model','year','fullname','idtype','idnum','dob','addr1','atoll','island','phone','email','startdate'].forEach(id=>{
+// Auto-clear validation on change
+['regno','chassis','make','model','year','fullname','idtype','idnum','dob',
+ 'addr1','atoll','island','phone','email','startdate'].forEach(id => {
   const el = document.getElementById(id);
-  if(el) el.addEventListener('input',()=>{ const p = el.closest('.field'); if(p) p.classList.remove('invalid'); });
-  if(el) el.addEventListener('change',()=>{ const p = el.closest('.field'); if(p) p.classList.remove('invalid'); });
+  if (!el) return;
+  const clear = () => { const p = el.closest('.field'); if (p) p.classList.remove('invalid'); };
+  el.addEventListener('input', clear);
+  el.addEventListener('change', clear);
 });
 
-function validateStep(step){
+function validateStep(step) {
   let ok = true;
-  if(step===0){
-    if(!selectedVType){ document.getElementById('vtype-err').style.display='block'; shakeField(document.getElementById('vtype-grid')); ok=false; }
-    const rg = document.getElementById('regno').value.trim();
-    if(!rg){ invalidate('regno'); ok=false; }
-    const ch = document.getElementById('chassis').value.trim();
-    if(ch.length<10){ invalidate('chassis'); ok=false; }
-    if(!document.getElementById('make').value){ invalidate('make'); ok=false; }
-    if(!document.getElementById('model').value.trim()){ invalidate('model'); ok=false; }
-    if(!document.getElementById('year').value){ invalidate('year'); ok=false; }
-  } else if(step===1){
-    if(!document.getElementById('fullname').value.trim()){ invalidate('fullname'); ok=false; }
-    if(!document.getElementById('idtype').value){ invalidate('idtype'); ok=false; }
-    if(!document.getElementById('idnum').value.trim()){ invalidate('idnum'); ok=false; }
-    if(!document.getElementById('dob').value){ invalidate('dob'); ok=false; }
-    if(!document.getElementById('addr1').value.trim()){ invalidate('addr1'); ok=false; }
-    if(!document.getElementById('atoll').value){ invalidate('atoll'); ok=false; }
-    if(!document.getElementById('island').value.trim()){ invalidate('island'); ok=false; }
-    const ph = document.getElementById('phone').value.trim();
-    if(!/^\d{7}$/.test(ph)){ invalidate('phone'); ok=false; }
-    const em = document.getElementById('email').value.trim();
-    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){ invalidate('email'); ok=false; }
-  } else if(step===2){
-    if(!document.getElementById('startdate').value){ invalidate('startdate'); ok=false; }
+  if (step === 0) {
+    if (!selectedVType) {
+      document.getElementById('vtype-err').style.display = 'block';
+      shakeField(document.getElementById('vtype-grid'));
+      ok = false;
+    }
+    if (!document.getElementById('regno').value.trim()) { invalidate('regno'); ok = false; }
+    if (document.getElementById('chassis').value.trim().length < 10) { invalidate('chassis'); ok = false; }
+    if (!document.getElementById('make').value) { invalidate('make'); ok = false; }
+    if (!document.getElementById('model').value.trim()) { invalidate('model'); ok = false; }
+    if (!document.getElementById('year').value) { invalidate('year'); ok = false; }
+  } else if (step === 1) {
+    if (!document.getElementById('fullname').value.trim()) { invalidate('fullname'); ok = false; }
+    if (!document.getElementById('idtype').value) { invalidate('idtype'); ok = false; }
+    if (!document.getElementById('idnum').value.trim()) { invalidate('idnum'); ok = false; }
+    if (!document.getElementById('dob').value) { invalidate('dob'); ok = false; }
+    if (!document.getElementById('addr1').value.trim()) { invalidate('addr1'); ok = false; }
+    if (!document.getElementById('atoll').value) { invalidate('atoll'); ok = false; }
+    if (!document.getElementById('island').value.trim()) { invalidate('island'); ok = false; }
+    if (!/^\d{7}$/.test(document.getElementById('phone').value.trim())) { invalidate('phone'); ok = false; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(document.getElementById('email').value.trim())) { invalidate('email'); ok = false; }
+  } else if (step === 2) {
+    if (!document.getElementById('startdate').value) { invalidate('startdate'); ok = false; }
   }
   return ok;
 }
 
-function populateSummary(){
-  const {total} = calcPremiums();
+function populateSummary() {
+  const { total } = calcPremiums();
   document.getElementById('confirm-total').textContent = fmtMVR(total);
-  document.getElementById('s-vtype').textContent = selectedVType||'—';
-  document.getElementById('s-regno').textContent = document.getElementById('regno').value||'—';
-  document.getElementById('s-chassis').textContent = document.getElementById('chassis').value||'—';
-  const mk = document.getElementById('make').value; const mo = document.getElementById('model').value;
-  document.getElementById('s-makemodel').textContent = [mk,mo].filter(Boolean).join(' ')||'—';
-  document.getElementById('s-year').textContent = document.getElementById('year').value||'—';
-  document.getElementById('s-name').textContent = document.getElementById('fullname').value||'—';
-  const idt = document.getElementById('idtype').value; const idn = document.getElementById('idnum').value;
-  document.getElementById('s-id').textContent = idt&&idn ? idt+': '+idn : '—';
-  const a1=document.getElementById('addr1').value; const a2=document.getElementById('addr2').value;
-  const atoll=document.getElementById('atoll').value; const isl=document.getElementById('island').value;
-  document.getElementById('s-addr').textContent = [a1,a2,isl,atoll].filter(Boolean).join(', ')||'—';
-  const ph = document.getElementById('phone').value; const em = document.getElementById('email').value;
-  document.getElementById('s-contact').textContent = [ph?'(960)'+ph:'',em].filter(Boolean).join(' | ')||'—';
+  document.getElementById('s-vtype').textContent = selectedVType || '—';
+  document.getElementById('s-regno').textContent = document.getElementById('regno').value || '—';
+  document.getElementById('s-chassis').textContent = document.getElementById('chassis').value || '—';
+  const mk = document.getElementById('make').value;
+  const mo = document.getElementById('model').value;
+  document.getElementById('s-makemodel').textContent = [mk, mo].filter(Boolean).join(' ') || '—';
+  document.getElementById('s-year').textContent = document.getElementById('year').value || '—';
+  document.getElementById('s-name').textContent = document.getElementById('fullname').value || '—';
+  const idt = document.getElementById('idtype').value;
+  const idn = document.getElementById('idnum').value;
+  document.getElementById('s-id').textContent = idt && idn ? idt + ': ' + idn : '—';
+  const a1 = document.getElementById('addr1').value;
+  const a2 = document.getElementById('addr2').value;
+  const atoll = document.getElementById('atoll').value;
+  const isl = document.getElementById('island').value;
+  document.getElementById('s-addr').textContent = [a1, a2, isl, atoll].filter(Boolean).join(', ') || '—';
+  const ph = document.getElementById('phone').value;
+  const em = document.getElementById('email').value;
+  document.getElementById('s-contact').textContent = [ph ? '(960) ' + ph : '', em].filter(Boolean).join(' | ') || '—';
   document.getElementById('s-polref').textContent = polRef;
-  const tabs = document.querySelectorAll('.period-tab');
   let pLabel = '—';
-  tabs.forEach(t=>{ if(t.classList.contains('sel')) pLabel = t.querySelector('.pd').textContent; });
+  document.querySelectorAll('.period-tab').forEach(t => {
+    if (t.classList.contains('sel')) pLabel = t.querySelector('.pd').textContent;
+  });
   document.getElementById('s-period').textContent = pLabel;
   const sd = document.getElementById('startdate').value;
   const ed = document.getElementById('enddate').value;
-  document.getElementById('s-start').textContent = sd ? new Date(sd).toLocaleDateString('en-MV',{day:'2-digit',month:'short',year:'numeric'}) : '—';
-  document.getElementById('s-end').textContent = ed ? new Date(ed).toLocaleDateString('en-MV',{day:'2-digit',month:'short',year:'numeric'}) : '—';
+  const fmt = d => d ? new Date(d).toLocaleDateString('en-MV', { day: '2-digit', month: 'short', year: 'numeric' }) : '—';
+  document.getElementById('s-start').textContent = fmt(sd);
+  document.getElementById('s-end').textContent = fmt(ed);
 }
 
-function goNext(){
-  if(!validateStep(currentStep)) return;
-  if(currentStep===3) return;
-  if(currentStep===2) populateSummary();
-  moveTo(currentStep+1);
+function goNext() {
+  if (!validateStep(currentStep)) return;
+  if (currentStep === 3) return;
+  if (currentStep === 2) populateSummary();
+  moveTo(currentStep + 1);
 }
 
-function goBack(){
-  if(currentStep===0) return;
-  moveTo(currentStep-1);
+function goBack() {
+  if (currentStep === 0) return;
+  moveTo(currentStep - 1);
 }
 
-function moveTo(step){
+function moveTo(step) {
   currentStep = step;
-  document.getElementById('track').style.transform = 'translateX(-'+(step*25)+'%)';
-  document.getElementById('step-num').textContent = step+1;
-  document.getElementById('btn-back').style.visibility = step===0?'hidden':'visible';
+  document.getElementById('track').style.transform = 'translateX(-' + (step * 25) + '%)';
+  document.getElementById('step-num').textContent = step + 1;
+  document.getElementById('btn-back').style.visibility = step === 0 ? 'hidden' : 'visible';
   const btnNext = document.getElementById('btn-next');
-  if(step===3){ btnNext.innerHTML='<i class="ti ti-printer" aria-hidden="true"></i> Print Policy'; btnNext.onclick=printPolicy; }
-  else { btnNext.innerHTML='Next <i class="ti ti-arrow-right" aria-hidden="true"></i>'; btnNext.onclick=goNext; }
-  document.querySelectorAll('.step-item').forEach((si,i)=>{
-    si.classList.remove('active','done');
-    if(i<step){ si.classList.add('done'); si.querySelector('.snum').style.display='none'; si.querySelector('i').style.display='block'; }
-    else if(i===step){ si.classList.add('active'); si.querySelector('.snum').style.display='block'; si.querySelector('i').style.display='none'; }
-    else { si.querySelector('.snum').style.display='block'; si.querySelector('i').style.display='none'; }
+  if (step === 3) {
+    btnNext.innerHTML = '<i class="ti ti-printer" aria-hidden="true"></i> Print Policy';
+    btnNext.onclick = printPolicy;
+  } else {
+    btnNext.innerHTML = 'Next <i class="ti ti-arrow-right" aria-hidden="true"></i>';
+    btnNext.onclick = goNext;
+  }
+  document.querySelectorAll('.step-item').forEach((si, i) => {
+    si.classList.remove('active', 'done');
+    const snum = si.querySelector('.snum');
+    const icon = si.querySelector('i');
+    if (i < step) {
+      si.classList.add('done');
+      snum.style.display = 'none';
+      icon.style.display = 'block';
+    } else if (i === step) {
+      si.classList.add('active');
+      snum.style.display = 'block';
+      icon.style.display = 'none';
+    } else {
+      snum.style.display = 'block';
+      icon.style.display = 'none';
+    }
   });
-  document.getElementById('slide-'+step).scrollTop=0;
+  document.getElementById('slide-' + step).scrollTop = 0;
 }
 
-function handlePay(method){
-  showToast('<i class="ti ti-arrow-up-right" style="font-size:15px;vertical-align:-2px"></i>  Redirecting to '+method+'...');
-  setTimeout(()=>{ showToast('<i class="ti ti-check" style="font-size:15px;vertical-align:-2px"></i>  Payment gateway opened. Complete your payment to activate the policy.'); }, 1800);
+function handlePay(method) {
+  showToast('<i class="ti ti-arrow-up-right" style="font-size:14px;vertical-align:-2px"></i>  Redirecting to ' + method + '...');
+  setTimeout(() => {
+    showToast('<i class="ti ti-check" style="font-size:14px;vertical-align:-2px"></i>  Payment gateway opened. Complete your payment to activate the policy.');
+  }, 1800);
 }
 
-function printPolicy(){
-  showToast('<i class="ti ti-printer" style="font-size:15px;vertical-align:-2px"></i>  Preparing policy document for print...');
+function printPolicy() {
+  showToast('<i class="ti ti-printer" style="font-size:14px;vertical-align:-2px"></i>  Preparing policy document for print...');
 }
 
-function showToast(msg){
+let toastTimer;
+function showToast(msg) {
   const t = document.getElementById('pay-toast');
   t.innerHTML = msg;
   t.style.display = 'block';
-  clearTimeout(t._to);
-  t._to = setTimeout(()=>t.style.display='none', 3500);
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.style.display = 'none', 3500);
 }
 
 updatePremiumDisplay();
 </script>
+</body>
+</html>
