@@ -309,6 +309,73 @@ body { font-family: 'Inter', sans-serif; color: var(--text); background: #fff; m
 .slide-back-leave-to      { transform: translateX(100%); opacity: 0; }
 .fade-up-enter-active { transition: transform .4s ease, opacity .4s ease; }
 .fade-up-enter-from   { transform: translateY(20px); opacity: 0; }
+
+/* ── RESPONSIVE ≤ 768px — icon-only sidebar ─────────── */
+@media (max-width: 873px) {
+  /* Sidebar: collapse to a 56px icon strip */
+  .sidebar {
+    width: 56px;
+    padding: 20px 0;
+    align-items: center;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  /* Logo: SVG only, no text */
+  .sb-logo { justify-content: center; gap: 0; margin-bottom: 20px; }
+  .sb-logo > div { display: none; }
+
+  /* User badge: avatar only, no text */
+  .sb-user { justify-content: center; padding: 8px; margin-bottom: 20px; gap: 0; }
+  .sb-user > div:last-child { display: none; }
+
+  /* Step tracker: centered dots + connectors, no labels */
+  .v-steps { display: flex; flex-direction: column; align-items: center; width: 100%; }
+  .v-step  { flex-direction: column; align-items: center; gap: 0; }
+  .v-step-info { display: none; }
+  .v-step-side { align-items: center; }
+  .v-connector { margin: 4px 0; }
+
+  /* Hide decorative text elements */
+  .sb-footer,
+  .deco-dots,
+  .deco-line-1 { display: none; }
+
+  /* Main area */
+  .main-body { padding: 28px 20px 32px; }
+
+  /* Form grids → 2 columns */
+  .g3, .g4 { grid-template-columns: 1fr 1fr; }
+  .s3, .s4 { grid-column: span 2; }
+
+  /* Split panels → stack */
+  .lookup-split   { grid-template-columns: 1fr; }
+  .pay-layout     { grid-template-columns: 1fr; }
+  .success-layout { grid-template-columns: 1fr; gap: 28px; padding: 0; }
+
+  /* Payment summary grid → single column */
+  .sum-grid { grid-template-columns: 1fr; }
+  .sum-full { grid-column: span 1; }
+
+  /* Step footer */
+  .sp-foot { flex-wrap: wrap; gap: 10px; }
+}
+
+/* ── RESPONSIVE ≤ 480px — small mobile ─────────────── */
+@media (max-width: 480px) {
+  .main-body { padding: 20px 14px 24px; }
+  .sp-title  { font-size: 20px; }
+
+  /* All grids → single column */
+  .g2, .g3, .g4 { grid-template-columns: 1fr; }
+  .s2, .s3, .s4 { grid-column: span 1; }
+
+  .btn { min-width: 80px; padding: 0 14px; }
+  .sp-foot { flex-direction: column; gap: 12px; }
+  .foot-note { display: none; }
+  .foot-btns { display: flex; gap: 8px; }
+  .foot-btns .btn { flex: 1; }
+}
   </style>
 </head>
 <body>
