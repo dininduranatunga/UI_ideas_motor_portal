@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Motor Third Party – Solarelle Insurance</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
 /* ── RESET & TOKENS ─────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -25,14 +25,39 @@
   --border:   #ddd;
 }
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Poppins', ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
 }
 
+/* ── TOP NAV ─────────────────────────────────── */
+.site-nav {
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 200;
+}
+.nav-inner {
+  padding: 0 32px;
+  display: flex; align-items: center;
+  height: 64px; gap: 32px;
+}
+.nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
+.nav-logo svg { width: 32px; height: 32px; }
+.nav-brand-name { font-size: 14px; font-weight: 800; color: var(--text); letter-spacing: .5px; line-height: 1.1; }
+.nav-brand-name em { color: var(--brand); font-style: normal; }
+.nav-brand-tag { font-size: 9px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); display: block; }
+.nav-links { display: flex; align-items: center; gap: 24px; flex: 1; }
+.nav-links a { font-size: 13px; font-weight: 500; color: var(--sub); text-decoration: none; transition: color .2s; white-space: nowrap; }
+.nav-links a:hover, .nav-links a.active { color: var(--brand); }
+.nav-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+.nav-user { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--sub); }
+.nav-av { width: 28px; height: 28px; border-radius: 50%; background: var(--brand-l); color: var(--brand); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; }
+.nav-user-name { font-size: 13px; font-weight: 500; color: var(--sub); }
+.nav-hotline { background: var(--brand); color: #fff; font-size: 13px; font-weight: 700; padding: 6px 14px; border-radius: 4px; }
+
 /* ── APP SHELL ───────────────────────────────── */
-.app-shell { display: flex; min-height: 100vh; }
+.app-shell { display: flex; min-height: calc(100vh - 64px); }
 
 /* ── SIDEBAR ─────────────────────────────────── */
 .sidebar {
@@ -271,6 +296,12 @@ body {
 
 /* ── RESPONSIVE ≤ 868px ──────────────────────── */
 @media (max-width: 885px) {
+  /* Nav */
+  .nav-links { display: none; }
+  .nav-inner { padding: 0 16px; height: 56px; }
+  .nav-user-name { display: none; }
+  .app-shell { min-height: calc(100vh - 56px); }
+
   /* Sidebar collapses to 56px icon strip */
   .sidebar { width: 56px; padding: 20px 0; align-items: center; overflow: hidden; }
   .sb-logo { justify-content: center; gap: 0; margin-bottom: 20px; }
@@ -315,11 +346,102 @@ body {
   .amt-val { font-size: 20px; }
   .sv-big  { font-size: 16px; }
 }
+
+/* ── THEME TOGGLE ────────────────────────────── */
+.theme-toggle {
+  width: 34px; height: 34px; border-radius: 50%;
+  border: 1.5px solid var(--border);
+  background: transparent; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--sub); transition: all .2s; flex-shrink: 0;
+}
+.theme-toggle:hover { border-color: var(--brand); color: var(--brand); background: var(--brand-xl); }
+
+/* ── DARK MODE ───────────────────────────────── */
+body.dark {
+  --text:     #e2e8f0;
+  --sub:      #94a3b8;
+  --muted:    #64748b;
+  --input-bg: #1e2533;
+  --bg:       #0f172a;
+  --border:   #334155;
+  --brand-l:  #1e2a42;
+  --brand-xl: #192035;
+}
+body.dark .site-nav           { background: #1e293b; border-color: #334155; }
+body.dark .nav-brand-name     { color: #e2e8f0; }
+body.dark .nav-links a        { color: #94a3b8; }
+body.dark .nav-links a:hover,
+body.dark .nav-links a.active { color: var(--brand); }
+body.dark .nav-user-name      { color: #94a3b8; }
+body.dark .main-panel         { background: #1e293b; }
+body.dark .pay-summary        { background: #162032; border-color: #334155; }
+body.dark .sum-table          { border-color: #334155; }
+body.dark .sum-row            { border-color: #334155; }
+body.dark .sum-cell           { border-color: #334155; }
+body.dark .or-sep span        { background: #1e293b; }
+body.dark .or-sep::before     { background: #334155; }
+body.dark .pay-panel          { border-color: #334155; }
+body.dark .cert-card          { border-color: #334155; }
+body.dark .cert-row           { border-color: rgba(96,107,179,.25); }
+body.dark .fi input,
+body.dark .fi select          { color: #e2e8f0; }
+body.dark .fi select          { color: #64748b; }
+body.dark .fi select.has-val  { color: #e2e8f0; }
+body.dark .fi input[readonly] { color: #94a3b8; }
+body.dark .ph-pfx             { background: #1e2a42; border-color: #334155; }
+body.dark .ok-circle          { background: #0d2b1a; border-color: var(--success); }
+body.dark .secure-row         { color: #64748b; }
   </style>
 </head>
 <body>
 
 <div id="app">
+
+  <!-- ══ TOP NAV ══════════════════════════════ -->
+  <div class="site-nav">
+    <div class="nav-inner">
+      <a class="nav-logo" href="#">
+        <svg viewBox="0 0 40 40" fill="none">
+          <rect width="40" height="40" rx="8" fill="#eaebf8"/>
+          <path d="M8 22c3-4 5-4 8 0s5 4 8 0 5-4 8 0" stroke="#606bb3" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+          <path d="M8 27c3-4 5-4 8 0s5 4 8 0 5-4 8 0" stroke="#606bb3" stroke-width="2.2" stroke-linecap="round" fill="none" opacity=".5"/>
+          <path d="M20 8l2 5h5l-4 3 1.5 5L20 18l-4.5 3 1.5-5-4-3h5z" fill="#606bb3" opacity=".85"/>
+        </svg>
+        <div>
+          <div class="nav-brand-name">SOLAR<em>ELLE</em></div>
+          <span class="nav-brand-tag">Insurance</span>
+        </div>
+      </a>
+      <nav class="nav-links">
+        <a href="#">Personal</a>
+        <a href="#">Business</a>
+        <a href="#">Claims</a>
+        <a href="#" class="active">Online Access</a>
+        <a href="#">Contact</a>
+      </nav>
+      <div class="nav-right">
+        <button class="theme-toggle" @click="toggleTheme" :title="darkMode ? 'Switch to light mode' : 'Switch to dark mode'">
+          <svg v-if="darkMode" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/>
+            <line x1="4.93" y1="4.93" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.07" y2="19.07"/>
+            <line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/>
+            <line x1="4.93" y1="19.07" x2="6.34" y2="17.66"/><line x1="17.66" y1="6.34" x2="19.07" y2="4.93"/>
+          </svg>
+          <svg v-else width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </button>
+        <div class="nav-user">
+          <div class="nav-av">OU</div>
+          <span class="nav-user-name">Online User</span>
+        </div>
+        <div class="nav-hotline">1800</div>
+      </div>
+    </div>
+  </div>
+
 <div class="app-shell">
 
   <!-- ══ SIDEBAR ══════════════════════════════ -->
@@ -709,6 +831,16 @@ createApp({
     const policyNumber   = ref(genPolicy());
     const errors         = ref({});
 
+    const savedTheme = localStorage.getItem('solarelle-theme');
+    const darkMode   = ref(savedTheme === 'dark');
+    if (darkMode.value) document.body.classList.add('dark');
+
+    function toggleTheme() {
+      darkMode.value = !darkMode.value;
+      document.body.classList.toggle('dark', darkMode.value);
+      localStorage.setItem('solarelle-theme', darkMode.value ? 'dark' : 'light');
+    }
+
     const vehicle = ref({ vehicleType:'', vehicleNumber:'' });
     const owner   = ref({ ownerName:'', idType:'', idNumber:'', address:'', atoll:'', island:'', mobile:'', email:'' });
     const policy  = ref({ premium:'', issuingDate:todayStr(), proposalNumber:'', periodFrom:'', periodTo:'' });
@@ -780,9 +912,11 @@ createApp({
       vehicleTypes: VEHICLE_TYPES, idTypes: ID_TYPES, atolls: ATOLLS, stepMeta: STEP_META,
       idLabel, selectedIslands, todayStr: todayStr(),
       stepState, nextStep, prevStep, finish, reset, updatePeriodTo, fmtDate,
+      darkMode, toggleTheme,
     };
   }
 }).mount('#app');
 </script>
 </body>
 </html>
+
