@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Solarelle Motor Insurance Portal</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="sky-confetti" aria-hidden="true">
+      <span></span><span></span><span></span><span></span><span></span>
+    </div>
+
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Solarelle insurance home">
+        <span class="brand-mark">
+          <svg viewBox="0 0 48 48" aria-hidden="true">
+            <path d="M24 8l4.2 8.5 9.4 1.4-6.8 6.6 1.6 9.3L24 29.4l-8.4 4.4 1.6-9.3-6.8-6.6 9.4-1.4L24 8z" />
+            <path d="M10 35c4 0 4-4 8-4s4 4 8 4 4-4 8-4 4 4 8 4" />
+          </svg>
+        </span>
+        <span>
+          <strong>SOLARELLE</strong>
+          <small>INSURANCE</small>
+        </span>
+      </a>
+      <div class="divider"></div>
+      <p>Motor Insurance Portal</p>
+      <button class="user-pill" type="button" aria-label="Online user profile">
+        <span>OU</span>
+        Online User
+      </button>
+    </header>
+
+    <main>
+      <nav class="steps" aria-label="Application progress">
+        <button class="step active" type="button" data-step-target="0">
+          <span class="step-bubble">1</span>
+          <span><strong>Vehicle Info</strong><small>Type & registration</small></span>
+        </button>
+        <button class="step" type="button" data-step-target="1">
+          <span class="step-bubble">2</span>
+          <span><strong>Owner Info</strong><small>Personal & contact</small></span>
+        </button>
+        <button class="step" type="button" data-step-target="2">
+          <span class="step-bubble">3</span>
+          <span><strong>Policy Details</strong><small>Premium & period</small></span>
+        </button>
+        <button class="step" type="button" data-step-target="3">
+          <span class="step-bubble">4</span>
+          <span><strong>Payment</strong><small>Review & pay</small></span>
+        </button>
+      </nav>
+
+      <section class="portal-card" aria-live="polite">
+        <div class="card-spark spark-one"></div>
+        <div class="card-spark spark-two"></div>
+
+        <article class="page visible" data-page="0">
+          <header class="page-header">
+            <p>Step 1 of 4</p>
+            <h1>Vehicle Lookup</h1>
+            <span>Enter the vehicle details to begin your insurance application.</span>
+          </header>
+
+          <div class="split-panel">
+            <form class="form-grid" aria-label="Vehicle details">
+              <label class="field full">
+                <span>Vehicle Type <b>*</b></span>
+                <select>
+                  <option>-- Select Vehicle Type --</option>
+                  <option>Van</option>
+                  <option>Car</option>
+                  <option>Motorcycle</option>
+                </select>
+              </label>
+              <label class="field full">
+                <span>Vehicle Registration Number <b>*</b></span>
+                <input type="text" placeholder="e.g. C4A2345" />
+                <em>Select a vehicle type above first</em>
+              </label>
+            </form>
+
+            <aside class="info-stage">
+              <div class="cartoon-car" aria-hidden="true">
+                <div class="car-body"></div>
+                <div class="car-window"></div>
+                <div class="wheel wheel-left"></div>
+                <div class="wheel wheel-right"></div>
+              </div>
+              <h2>Third Party Motor Insurance</h2>
+              <p>Mandatory coverage for all registered vehicles in the Maldives. Quick online issuance in minutes.</p>
+              <div class="note-card">
+                <strong>Coverage Includes</strong>
+                <span>Third-party bodily injury and property damage liability as required by law.</span>
+              </div>
+            </aside>
+          </div>
+        </article>
+
+        <article class="page" data-page="1">
+          <header class="page-header">
+            <p>Step 2 of 4</p>
+            <h1>Owner Information</h1>
+            <span>Personal, address and contact details of the vehicle owner.</span>
+          </header>
+
+          <form class="form-sections" aria-label="Owner information">
+            <div class="section-title"><span>:-)</span><strong>Personal Details</strong></div>
+            <div class="form-grid">
+              <label class="field wide">
+                <span>Owner Full Name <b>*</b></span>
+                <input type="text" placeholder="Full legal name as per ID" />
+              </label>
+              <label class="field">
+                <span>Identification Type <b>*</b></span>
+                <select><option>National Identity Card</option><option>Passport</option></select>
+              </label>
+              <label class="field full">
+                <span>NIC Number <b>*</b></span>
+                <input type="text" placeholder="e.g. A123456" />
+              </label>
+            </div>
+
+            <div class="section-title"><span>@</span><strong>Address Details</strong></div>
+            <div class="form-grid">
+              <label class="field full">
+                <span>Street Address / House <b>*</b></span>
+                <input type="text" placeholder="Street, house name or block number" />
+              </label>
+              <label class="field">
+                <span>Atoll <b>*</b></span>
+                <select><option>-- Select Atoll --</option><option>Alif Alif Atoll</option></select>
+              </label>
+              <label class="field">
+                <span>Island <b>*</b></span>
+                <select><option>Select an atoll first</option><option>Ukulhas</option></select>
+              </label>
+            </div>
+
+            <div class="section-title"><span>tel</span><strong>Contact Details</strong></div>
+            <div class="form-grid">
+              <label class="field">
+                <span>Mobile Number <b>*</b></span>
+                <input type="tel" placeholder="+960   7654321" />
+              </label>
+              <label class="field">
+                <span>Email Address</span>
+                <input type="email" placeholder="owner@example.com" />
+              </label>
+            </div>
+          </form>
+        </article>
+
+        <article class="page" data-page="2">
+          <header class="page-header">
+            <p>Step 3 of 4</p>
+            <h1>Policy Details</h1>
+            <span>Set the coverage period, premium and proposal reference.</span>
+          </header>
+
+          <form class="form-sections" aria-label="Policy details">
+            <div class="section-title"><span>#</span><strong>Policy Reference</strong></div>
+            <div class="form-grid">
+              <label class="field">
+                <span>Vehicle</span>
+                <input type="text" value="Van / C4A2345" readonly />
+              </label>
+              <label class="field">
+                <span>Owner</span>
+                <input type="text" value="asdgfgf" readonly />
+              </label>
+              <label class="field">
+                <span>Proposal Number <b>*</b></span>
+                <input type="text" placeholder="e.g. PROP-20250001" />
+              </label>
+              <label class="field">
+                <span>Issuing Date <b>*</b></span>
+                <input type="date" value="2026-05-09" />
+              </label>
+            </div>
+
+            <div class="section-title"><span>$</span><strong>Premium & Coverage Period</strong></div>
+            <div class="form-grid three">
+              <label class="field">
+                <span>Premium Amount (MVR) <b>*</b></span>
+                <input type="number" placeholder="0.00" />
+              </label>
+              <label class="field">
+                <span>Period From <b>*</b></span>
+                <input type="date" />
+              </label>
+              <label class="field">
+                <span>Period To</span>
+                <input type="date" />
+                <em>Auto: 1 year from start</em>
+              </label>
+            </div>
+          </form>
+        </article>
+
+        <article class="page" data-page="3">
+          <header class="page-header">
+            <p>Step 4 of 4</p>
+            <h1>Review & Payment</h1>
+            <span>Confirm all details before completing your policy purchase.</span>
+          </header>
+
+          <div class="payment-layout">
+            <section class="summary-card">
+              <span class="policy-number">SOL2605106458</span>
+              <h2>Third Party Motor Insurance</h2>
+              <p>01 May 2026 &rarr; 30 Apr 2027</p>
+              <div class="summary-grid">
+                <div><small>Vehicle Type</small><strong>Van</strong></div>
+                <div><small>Registration</small><strong>C4A2345</strong></div>
+                <div class="span-two"><small>Owner</small><strong>asdgfgf / 357Y356</strong></div>
+                <div class="span-two"><small>Address</small><strong>edhrgsht, Ukulhas, Alif Alif Atoll</strong></div>
+                <div><small>Mobile</small><strong>+960 3465623</strong></div>
+                <div><small>Email</small><strong>didhgj@gmail.com</strong></div>
+                <div><small>Proposal No.</small><strong>43265</strong></div>
+                <div><small>Issuing Date</small><strong>09 May 2026</strong></div>
+              </div>
+              <div class="total-row">
+                <small>Total Premium</small>
+                <strong>MVR 4456.00</strong>
+              </div>
+            </section>
+
+            <aside class="payment-box">
+              <h2>Complete Payment</h2>
+              <p>Choose your preferred payment method below.</p>
+              <div class="amount-card">
+                <small>Amount Due</small>
+                <strong><span>MVR</span> 4456.00</strong>
+              </div>
+              <button class="pay-button" type="button">Pay Online Now</button>
+              <div class="or-line"><span>or</span></div>
+              <button class="credit-button" type="button">Use Account Credit</button>
+              <small class="secure">Locked with 256-bit SSL encryption</small>
+            </aside>
+          </div>
+        </article>
+
+        <footer class="actions">
+          <button class="back" type="button" data-prev>&lt; Back</button>
+          <p>All fields marked with a red dot are required.</p>
+          <button class="next" type="button" data-next>Continue &gt;</button>
+        </footer>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
