@@ -1,0 +1,1033 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Solarelle Motor Insurance Form</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #242326;
+      --muted: #5f6878;
+      --line: rgba(97, 109, 179, .18);
+      --brand: #616db3;
+      --brand-strong: #4f5da9;
+      --aqua: #13b6c8;
+      --sea: #087e9a;
+      --green: #2bb064;
+      --danger: #e45847;
+      --surface: rgba(255, 255, 255, .86);
+      --surface-strong: #fff;
+      --shadow: 0 28px 80px rgba(20, 34, 60, .18);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: Poppins, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #e8f3f7;
+      overflow-x: hidden;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    .ocean {
+      position: fixed;
+      inset: 0;
+      z-index: -3;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.52), rgba(255,255,255,.2) 32%, rgba(255,255,255,.88) 100%),
+        url("https://solarelle.com/_astro/motor.24_LpBQX_8xQfD.webp") center / cover no-repeat;
+      transform: scale(1.04);
+      animation: tide 16s ease-in-out infinite alternate;
+    }
+
+    .ocean::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 16% 18%, rgba(19, 182, 200, .28), transparent 28%),
+        linear-gradient(110deg, rgba(255,255,255,.44), transparent 40%, rgba(97,109,179,.18));
+      mix-blend-mode: screen;
+      animation: shimmer 9s ease-in-out infinite alternate;
+    }
+
+    @keyframes tide {
+      from { transform: scale(1.04) translate3d(-10px, -8px, 0); }
+      to { transform: scale(1.08) translate3d(12px, 10px, 0); }
+    }
+
+    @keyframes shimmer {
+      from { opacity: .55; transform: translateX(-18px); }
+      to { opacity: .92; transform: translateX(18px); }
+    }
+
+    .app-shell {
+      min-height: 100vh;
+      padding: 0 0 48px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      min-height: 72px;
+      padding: 16px clamp(18px, 5vw, 64px);
+      border: 0;
+      border-radius: 0;
+      background: linear-gradient(180deg, rgba(255,255,255,.78), rgba(255,255,255,.44) 58%, rgba(255,255,255,0));
+      box-shadow: none;
+      backdrop-filter: blur(18px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 230px;
+    }
+
+    .mark {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, rgba(97,109,179,.14), rgba(19,182,200,.16));
+      color: var(--brand);
+      font-weight: 700;
+      letter-spacing: .03em;
+    }
+
+    .brand-name {
+      display: grid;
+      line-height: 1.05;
+      font-weight: 700;
+      font-size: 20px;
+    }
+
+    .brand-name small {
+      margin-top: 4px;
+      color: #444344;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: .42em;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: clamp(16px, 3vw, 44px);
+      color: #34343b;
+      font-size: 14px;
+    }
+
+    .nav span { white-space: nowrap; }
+
+    .hero-copy {
+      max-width: 1120px;
+      margin: 52px auto 24px;
+      color: #fff;
+      text-shadow: 0 8px 26px rgba(0,0,0,.25);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: rgba(255,255,255,.88);
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 34px;
+      height: 2px;
+      background: currentColor;
+    }
+
+    h1 {
+      max-width: 760px;
+      margin: 0;
+      font-size: clamp(36px, 5.4vw, 68px);
+      line-height: .98;
+      letter-spacing: 0;
+    }
+
+    .hero-copy p {
+      max-width: 640px;
+      margin: 20px 0 0;
+      color: rgba(255,255,255,.9);
+      font-size: clamp(15px, 1.5vw, 18px);
+      line-height: 1.75;
+    }
+
+    .quote-btn,
+    .primary-btn {
+      border: 0;
+      border-radius: 8px;
+      color: #fff;
+      background: linear-gradient(135deg, #7770c9, #5767b8);
+      box-shadow: 0 14px 32px rgba(87, 103, 184, .28);
+      cursor: pointer;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .quote-btn {
+      padding: 13px 22px;
+      font-weight: 600;
+    }
+
+    .quote-btn:hover,
+    .primary-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 38px rgba(87, 103, 184, .34);
+    }
+
+    .portal {
+      display: grid;
+      grid-template-columns: minmax(240px, 300px) minmax(0, 820px);
+      gap: 20px;
+      max-width: 1140px;
+      margin: 0 auto;
+      align-items: start;
+    }
+
+    .progress-panel,
+    .form-card {
+      border: 1px solid rgba(255,255,255,.72);
+      border-radius: 8px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(20px);
+    }
+
+    .progress-panel {
+      position: sticky;
+      top: 20px;
+      padding: 22px;
+      overflow: hidden;
+    }
+
+    .progress-panel::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto;
+      height: 4px;
+      background: linear-gradient(90deg, var(--aqua), var(--brand));
+    }
+
+    .progress-title {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .steps {
+      display: grid;
+      gap: 14px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      gap: 12px;
+      align-items: center;
+      padding: 10px;
+      border-radius: 8px;
+      color: var(--muted);
+      cursor: pointer;
+      transition: background .2s ease, color .2s ease, transform .2s ease;
+    }
+
+    .step:hover { background: rgba(97,109,179,.08); }
+
+    .step-dot {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(97,109,179,.12);
+      color: var(--brand);
+      font-size: 13px;
+      font-weight: 700;
+      transition: background .2s ease, color .2s ease;
+    }
+
+    .step.active {
+      color: var(--ink);
+      background: rgba(255,255,255,.72);
+      transform: translateX(4px);
+    }
+
+    .step.active .step-dot {
+      color: #fff;
+      background: var(--brand);
+      box-shadow: 0 0 0 6px rgba(97,109,179,.14);
+    }
+
+    .step.done .step-dot {
+      color: #fff;
+      background: var(--green);
+    }
+
+    .step strong {
+      display: block;
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+
+    .step small {
+      display: block;
+      margin-top: 2px;
+      font-size: 11px;
+    }
+
+    .trust-box {
+      margin-top: 22px;
+      padding: 18px;
+      border-radius: 8px;
+      background: linear-gradient(145deg, rgba(19,182,200,.12), rgba(97,109,179,.12));
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .form-card {
+      overflow: hidden;
+      animation: rise .55s ease both;
+    }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(18px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .form-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      padding: clamp(24px, 4vw, 42px);
+      border-bottom: 1px solid var(--line);
+      background: rgba(255,255,255,.78);
+    }
+
+    .form-head h2 {
+      margin: 4px 0 8px;
+      font-size: clamp(26px, 3vw, 42px);
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+
+    .form-head p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .step-count {
+      color: var(--brand);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .badge {
+      align-self: start;
+      padding: 10px 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--sea);
+      background: rgba(255,255,255,.72);
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .form-body {
+      display: grid;
+      gap: 28px;
+      padding: clamp(24px, 4vw, 42px);
+      background: rgba(255,255,255,.72);
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 18px;
+      color: #343b7a;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .section-title::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--line);
+    }
+
+    .fields {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px 22px;
+    }
+
+    .field.full { grid-column: 1 / -1; }
+
+    label {
+      display: grid;
+      gap: 7px;
+      color: #7a83b5;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .required::before {
+      content: "";
+      display: inline-block;
+      width: 5px;
+      height: 5px;
+      margin-right: 6px;
+      border-radius: 50%;
+      background: var(--danger);
+      vertical-align: 2px;
+    }
+
+    input,
+    select {
+      width: 100%;
+      min-height: 50px;
+      border: 1px solid rgba(97,109,179,.22);
+      border-radius: 8px;
+      padding: 0 16px;
+      color: var(--ink);
+      background: rgba(255,255,255,.88);
+      outline: 0;
+      transition: border .2s ease, box-shadow .2s ease, background .2s ease;
+    }
+
+    select {
+      -webkit-appearance: none;
+      appearance: none;
+      cursor: pointer;
+      padding-right: 48px;
+      background-image:
+        linear-gradient(45deg, transparent 50%, var(--brand) 50%),
+        linear-gradient(135deg, var(--brand) 50%, transparent 50%),
+        linear-gradient(to right, rgba(97,109,179,.16), rgba(97,109,179,.16));
+      background-position:
+        calc(100% - 22px) 52%,
+        calc(100% - 16px) 52%,
+        calc(100% - 44px) 50%;
+      background-size:
+        6px 6px,
+        6px 6px,
+        1px 24px;
+      background-repeat: no-repeat;
+    }
+
+    select::-ms-expand {
+      display: none;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: var(--aqua);
+      background: #fff;
+      box-shadow: 0 0 0 4px rgba(19,182,200,.13);
+    }
+
+    .hint {
+      margin-top: 7px;
+      color: #6d76ad;
+      font-size: 12px;
+      text-transform: none;
+      font-weight: 400;
+    }
+
+    .split-panel {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 310px;
+      gap: 28px;
+    }
+
+    .info-card,
+    .summary-card,
+    .payment-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255,255,255,.74);
+    }
+
+    .info-card {
+      display: grid;
+      place-items: center;
+      min-height: 340px;
+      padding: 34px;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .car-bubble {
+      display: grid;
+      place-items: center;
+      width: 94px;
+      height: 94px;
+      margin: 0 auto 18px;
+      border-radius: 50%;
+      color: #fff;
+      background: linear-gradient(135deg, var(--aqua), var(--brand));
+      box-shadow: 0 18px 46px rgba(19,182,200,.24);
+      animation: float 3.6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .info-card h3 {
+      margin: 0 0 10px;
+      font-size: 21px;
+    }
+
+    .info-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .review-grid {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 24px;
+    }
+
+    .summary-card {
+      overflow: hidden;
+    }
+
+    .summary-header {
+      padding: 26px;
+      background: linear-gradient(135deg, rgba(19,182,200,.1), rgba(97,109,179,.12));
+    }
+
+    .summary-header strong {
+      display: block;
+      color: var(--brand);
+      font-size: 13px;
+    }
+
+    .summary-header h3 {
+      margin: 8px 0;
+      font-size: 25px;
+    }
+
+    .summary-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .summary-item {
+      min-height: 84px;
+      padding: 18px 20px;
+      border-top: 1px solid var(--line);
+    }
+
+    .summary-item:nth-child(odd) {
+      border-right: 1px solid var(--line);
+    }
+
+    .summary-item.full {
+      grid-column: 1 / -1;
+      border-right: 0;
+    }
+
+    .summary-item small {
+      display: block;
+      margin-bottom: 7px;
+      color: #8a92bd;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .premium {
+      padding: 22px 26px;
+      color: var(--brand);
+      background: rgba(97,109,179,.08);
+      font-size: 30px;
+      font-weight: 700;
+    }
+
+    .payment-card {
+      padding: 26px;
+      align-self: start;
+      background: rgba(247,248,255,.84);
+    }
+
+    .amount {
+      margin: 20px 0;
+      padding: 26px;
+      border-radius: 8px;
+      background: #fff;
+      text-align: center;
+    }
+
+    .amount small {
+      color: #8a92bd;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .amount strong {
+      display: block;
+      margin-top: 6px;
+      color: var(--brand);
+      font-size: 38px;
+      line-height: 1;
+    }
+
+    .primary-btn,
+    .secondary-btn,
+    .outline-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 52px;
+      padding: 0 24px;
+      border-radius: 8px;
+      font-weight: 700;
+    }
+
+    .primary-btn {
+      min-width: 190px;
+    }
+
+    .secondary-btn,
+    .outline-btn {
+      border: 1px solid rgba(228,88,71,.4);
+      color: #d94737;
+      background: rgba(255,255,255,.7);
+      cursor: pointer;
+    }
+
+    .outline-btn {
+      width: 100%;
+      margin-top: 14px;
+      border-color: var(--brand);
+      color: var(--brand);
+      background: transparent;
+    }
+
+    .footer-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      padding: 22px clamp(24px, 4vw, 42px);
+      border-top: 1px solid var(--line);
+      background: rgba(255,255,255,.82);
+    }
+
+    .footer-note {
+      color: #6d76ad;
+      font-size: 12px;
+    }
+
+    .screen {
+      display: none;
+    }
+
+    .screen.active {
+      display: block;
+      animation: fadeSlide .36s ease both;
+    }
+
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 940px) {
+      .nav { display: none; }
+      .portal,
+      .split-panel,
+      .review-grid {
+        grid-template-columns: 1fr;
+      }
+      .progress-panel {
+        position: static;
+      }
+      .steps {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+      .step {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        text-align: center;
+      }
+      .step.active {
+        transform: translateY(-2px);
+      }
+      .trust-box { display: none; }
+    }
+
+    @media (max-width: 680px) {
+      .app-shell { padding: 0 0 32px; }
+      .topbar {
+        border-radius: 0;
+      }
+      .quote-btn { display: none; }
+      .hero-copy {
+        margin: 34px 8px 18px;
+      }
+      .portal { gap: 12px; }
+      .progress-panel,
+      .form-card {
+        border-radius: 8px;
+      }
+      .steps {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .form-head {
+        display: grid;
+      }
+      .fields,
+      .summary-list {
+        grid-template-columns: 1fr;
+      }
+      .summary-item:nth-child(odd) {
+        border-right: 0;
+      }
+      .footer-actions {
+        display: grid;
+      }
+      .primary-btn,
+      .secondary-btn {
+        width: 100%;
+      }
+      .footer-note {
+        order: 3;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="ocean" aria-hidden="true"></div>
+
+  <main class="app-shell">
+    <header class="topbar">
+      <div class="brand" aria-label="Solarelle Insurance">
+        <div class="mark">S</div>
+        <div class="brand-name">
+          Solarelle
+          <small>INSURANCE</small>
+        </div>
+      </div>
+      <nav class="nav" aria-label="Solarelle navigation">
+        <span>Personal</span>
+        <span>Corporate</span>
+        <span>About</span>
+        <span>Buy Online</span>
+        <span>Policy Verification</span>
+      </nav>
+      <button class="quote-btn" type="button">Get Quote</button>
+    </header>
+
+    <section class="hero-copy" aria-labelledby="page-title">
+      <div class="eyebrow">Motor Insurance Portal</div>
+      <h1 id="page-title">Drive With Confidence</h1>
+      <p>Complete your third party motor policy in a streamlined flow inspired by Solarelle's official digital experience.</p>
+    </section>
+
+    <section class="portal" aria-label="Motor insurance application">
+      <aside class="progress-panel">
+        <p class="progress-title">Application progress</p>
+        <ol class="steps">
+          <li class="step active" data-step="0">
+            <span class="step-dot">1</span>
+            <span><strong>Vehicle Info</strong><small>Type & registration</small></span>
+          </li>
+          <li class="step" data-step="1">
+            <span class="step-dot">2</span>
+            <span><strong>Owner Info</strong><small>Personal & contact</small></span>
+          </li>
+          <li class="step" data-step="2">
+            <span class="step-dot">3</span>
+            <span><strong>Policy Details</strong><small>Premium & period</small></span>
+          </li>
+          <li class="step" data-step="3">
+            <span class="step-dot">4</span>
+            <span><strong>Payment</strong><small>Review & pay</small></span>
+          </li>
+        </ol>
+        <div class="trust-box">
+          Quick online issuance with secure payment and clear policy confirmation.
+        </div>
+      </aside>
+
+      <form class="form-card">
+        <section class="screen active" data-screen="0">
+          <div class="form-head">
+            <div>
+              <span class="step-count">Step 1 of 4</span>
+              <h2>Vehicle Lookup</h2>
+              <p>Enter the vehicle details to begin your insurance application.</p>
+            </div>
+            <span class="badge">Third Party Motor</span>
+          </div>
+          <div class="form-body split-panel">
+            <div>
+              <div class="section-title">Vehicle details</div>
+              <div class="fields">
+                <label class="field full required">Vehicle Type
+                  <select>
+                    <option>Van</option>
+                    <option>Car</option>
+                    <option>Motorcycle</option>
+                    <option>Pickup</option>
+                  </select>
+                </label>
+                <label class="field full required">Vehicle Registration Number
+                  <input value="C4A2345" placeholder="e.g. C4A2345">
+                  <span class="hint">The registration is checked before the policy details are prepared.</span>
+                </label>
+              </div>
+            </div>
+            <div class="info-card">
+              <div>
+                <div class="car-bubble" aria-hidden="true">
+                  <svg width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9 22.5L12.2 14.8C12.8 13.4 14.1 12.5 15.6 12.5H26.4C27.9 12.5 29.2 13.4 29.8 14.8L33 22.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M7.5 22.5H34.5C36 22.5 37.2 23.7 37.2 25.2V30.6H33.4C33.1 32.4 31.5 33.8 29.6 33.8C27.7 33.8 26.1 32.4 25.8 30.6H16.2C15.9 32.4 14.3 33.8 12.4 33.8C10.5 33.8 8.9 32.4 8.6 30.6H4.8V25.2C4.8 23.7 6 22.5 7.5 22.5Z" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M13.5 22.5L15.6 17.2H26.4L28.5 22.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <h3>Third Party Motor Insurance</h3>
+                <p>Mandatory coverage for registered vehicles in the Maldives, issued online in minutes.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="screen" data-screen="1">
+          <div class="form-head">
+            <div>
+              <span class="step-count">Step 2 of 4</span>
+              <h2>Owner Information</h2>
+              <p>Personal, address and contact details of the vehicle owner.</p>
+            </div>
+            <span class="badge">Owner verified</span>
+          </div>
+          <div class="form-body">
+            <div>
+              <div class="section-title">Personal details</div>
+              <div class="fields">
+                <label class="required">Owner Full Name
+                  <input value="asdgfg" placeholder="Full legal name as per ID">
+                </label>
+                <label class="required">Identification Type
+                  <select>
+                    <option>National Identity Card</option>
+                    <option>Passport</option>
+                  </select>
+                </label>
+                <label class="field full required">NIC Number
+                  <input value="357Y356" placeholder="e.g. A123456">
+                </label>
+              </div>
+            </div>
+            <div>
+              <div class="section-title">Address details</div>
+              <div class="fields">
+                <label class="field full required">Street Address / House
+                  <input value="edhrgsht" placeholder="Street, house name or block number">
+                </label>
+                <label class="required">Atoll
+                  <select>
+                    <option>Alif Alif Atoll</option>
+                    <option>Kaafu Atoll</option>
+                    <option>Addu City</option>
+                  </select>
+                </label>
+                <label class="required">Island
+                  <select>
+                    <option>Ukulhas</option>
+                    <option>Male'</option>
+                    <option>Hithadhoo</option>
+                  </select>
+                </label>
+              </div>
+            </div>
+            <div>
+              <div class="section-title">Contact details</div>
+              <div class="fields">
+                <label class="required">Mobile Number
+                  <input value="+960 3465623" placeholder="+960 7654321">
+                </label>
+                <label>Email Address
+                  <input value="didhgj@gmail.com" placeholder="owner@example.com">
+                </label>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="screen" data-screen="2">
+          <div class="form-head">
+            <div>
+              <span class="step-count">Step 3 of 4</span>
+              <h2>Policy Details</h2>
+              <p>Set the coverage period, premium and proposal reference.</p>
+            </div>
+            <span class="badge">1 year cover</span>
+          </div>
+          <div class="form-body">
+            <div>
+              <div class="section-title">Policy reference</div>
+              <div class="fields">
+                <label>Vehicle
+                  <input value="Van / C4A2345" readonly>
+                </label>
+                <label>Owner
+                  <input value="asdgfg" readonly>
+                </label>
+                <label class="required">Proposal Number
+                  <input value="43265" placeholder="e.g. PROP-20250001">
+                </label>
+                <label class="required">Issuing Date
+                  <input type="date" value="2026-05-09">
+                </label>
+              </div>
+            </div>
+            <div>
+              <div class="section-title">Premium & coverage period</div>
+              <div class="fields">
+                <label class="required">Premium Amount (MVR)
+                  <input value="4456.00">
+                </label>
+                <label class="required">Period From
+                  <input type="date" value="2026-05-01">
+                </label>
+                <label>Period To
+                  <input type="date" value="2027-04-30">
+                  <span class="hint">Auto: 1 year from start</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="screen" data-screen="3">
+          <div class="form-head">
+            <div>
+              <span class="step-count">Step 4 of 4</span>
+              <h2>Review & Payment</h2>
+              <p>Confirm all details before completing your policy purchase.</p>
+            </div>
+            <span class="badge">Secure checkout</span>
+          </div>
+          <div class="form-body review-grid">
+            <div class="summary-card">
+              <div class="summary-header">
+                <strong>SOL2605106458</strong>
+                <h3>Third Party Motor Insurance</h3>
+                <span>01 May 2026 &nbsp; to &nbsp; 30 Apr 2027</span>
+              </div>
+              <div class="summary-list">
+                <div class="summary-item"><small>Vehicle Type</small>Van</div>
+                <div class="summary-item"><small>Registration</small>C4A2345</div>
+                <div class="summary-item full"><small>Owner</small>asdgfg / 357Y356</div>
+                <div class="summary-item full"><small>Address</small>edhrgsht, Ukulhas, Alif Alif Atoll</div>
+                <div class="summary-item"><small>Mobile</small>+960 3465623</div>
+                <div class="summary-item"><small>Email</small>didhgj@gmail.com</div>
+              </div>
+              <div class="premium">MVR 4456.00</div>
+            </div>
+            <div class="payment-card">
+              <h3>Complete Payment</h3>
+              <p>Choose your preferred payment method below.</p>
+              <div class="amount">
+                <small>Amount Due</small>
+                <strong>MVR 4456.00</strong>
+              </div>
+              <button class="primary-btn" type="button">Pay Online Now</button>
+              <button class="outline-btn" type="button">Use Account Credit</button>
+              <p class="hint">Secured by 256-bit SSL encryption</p>
+            </div>
+          </div>
+        </section>
+
+        <div class="footer-actions">
+          <button class="secondary-btn" type="button" data-action="back">Back</button>
+          <span class="footer-note">All fields marked with a red dot are required</span>
+          <button class="primary-btn" type="button" data-action="next">Continue</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <script>
+    const steps = [...document.querySelectorAll(".step")];
+    const screens = [...document.querySelectorAll(".screen")];
+    const back = document.querySelector("[data-action='back']");
+    const next = document.querySelector("[data-action='next']");
+    const notes = [
+      "All fields marked with a red dot are required",
+      "Your contact details are used for policy issuance",
+      "Review coverage dates before moving to payment",
+      "Policy will be issued immediately after payment"
+    ];
+    let current = 0;
+
+    function setStep(index) {
+      current = Math.max(0, Math.min(index, screens.length - 1));
+      screens.forEach((screen, i) => screen.classList.toggle("active", i === current));
+      steps.forEach((step, i) => {
+        step.classList.toggle("active", i === current);
+        step.classList.toggle("done", i < current);
+        step.querySelector(".step-dot").textContent = i < current ? "OK" : i + 1;
+      });
+      back.style.visibility = current === 0 ? "hidden" : "visible";
+      next.textContent = current === screens.length - 1 ? "Pay Online Now" : current === 2 ? "Review & Pay" : "Continue";
+      document.querySelector(".footer-note").textContent = notes[current];
+    }
+
+    steps.forEach((step) => {
+      step.addEventListener("click", () => setStep(Number(step.dataset.step)));
+    });
+
+    back.addEventListener("click", () => setStep(current - 1));
+    next.addEventListener("click", () => {
+      if (current < screens.length - 1) setStep(current + 1);
+    });
+
+    setStep(0);
+  </script>
+</body>
+</html>
